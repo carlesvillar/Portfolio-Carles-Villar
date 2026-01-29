@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carles Villar">
+
+<title>tarea_4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TAREA_4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TAREA_4_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="TAREA_4_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="TAREA_4_files/libs/quarto-html/popper.min.js"></script>
+<script src="TAREA_4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TAREA_4_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TAREA_4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TAREA_4_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TAREA_4_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TAREA_4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TAREA_4_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Análisis Temático foro medium.</h1>
+<p class="subtitle lead">Tarea 4: Análisis de Datos No Estructurados</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">today</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ol type="1">
+<li><div>
+
+</div></li>
+</ol>
+<section id="introducción-y-descripción-del-corpus" class="level2">
+<h2 class="anchored" data-anchor-id="introducción-y-descripción-del-corpus">Introducción y Descripción del Corpus</h2>
+<p>Para esta práctica de topic model, he decidido trabajar con artículos reales de la plataforma medium, una plataforma creada para que la gente pueda compartir sus ideas a traves de blogs, esta me parece un buen corpus ya que ofrece una gran variedad de artículos sobre diferentes temas.</p>
+<p>He elegido este corpus porque Medium funciona como un termómetro bastante acertado de las tendencias actuales en tecnología, diseño y emprendimiento, ya que muchos profesionales comparten ahí sus ideas y experiencias. No son noticias básicas de agencia, sino posts escritos por profesionales que mezclan opinión, tutoriales técnicos y consejos de vida . Me parecía muy interesante ver si un algoritmo como LDA es capaz de aclarar esa mezcla de temas.</p>
+<p>Siguiendo las instrucciones de la tarea de utilizar fuentes primarias, he utilizado un dataset de kaggle que recopila una extracción bruta, webscraping de miles de artículos publicados en las revistas más famosas de la plataforma. Es decir, son textos generados originalmente para consumo digital, con un lenguaje natural, directo y, a veces, lleno de jerga técnica.</p>
+<p>El conjunto de datos original consta de aproximadamente 6.500 documentos. Para construir la matriz documento-término, he tomado la decisión de combinar el título y el subtítulo de cada artículo. Esto lo he hecho Porque en Medium el contenido es muy denso, y lo importante del tema siempre está concentrado en esas dos frases. Analizar el texto completo habría añadido demasiado ruido, mientras que los titulares condensan perfectamente el vocabulario semántico que quiero modelar, usando palabras como IA, python, marketing etc.</p>
+<p>Además, el dataset incluye metadatos muy interesantes como la publicación de origen y el número de aplausos, lo que me permitirá, en la parte final del trabajo, cruzar los tópicos obtenidos con estas variables para ver, por ejemplo, si los artículos técnicos reciben más o menos importancia que los de desarrollo personal.</p>
+<p>El objetivo principal será ajustar varios modelos LDA para ver cómo el algoritmo agrupa estos textos.</p>
+</section>
+<section id="preprocesado-y-construcción-de-la-matriz-dtm" class="level2">
+<h2 class="anchored" data-anchor-id="preprocesado-y-construcción-de-la-matriz-dtm">Preprocesado y Construcción de la Matriz (DTM</h2>
+<p>Como en ya hemos visto en clase el siguiente paso es realizar la limpieza de los datos, ya que estamos trabajando con texto real sacado de internet. Esto implica que el texto puede ser muy ruidos y contener muchos carácteres raros o “basura”, y cuando peor sea los datos que le metemos al modelo, peor serán los datos que saca este modelo.</p>
+<p>Para transformar el archivo bruto en algo digerible para el algoritmo LDA, he seguido una estrategia de limpieza en cuatro fases:</p>
+<p>La primera decisión de diseño fue determinar qué considerar documento. Al revisar el dataset, vi que muchos subtítulos contenían la explicación real del título. Por eso, en lugar de usar solo el titular, decidí crear una nueva variable combinando título y subtítulo. Esto enriquece el vocabulario disponible por documento sin añadir el ruido excesivo que tendría el cuerpo entero del artículo.</p>
+<p>Al inspeccionar las primeras filas, detecté un problema específico de este dataset: restos de código HTML pegados al texto, como la etiqueta “classmarkupstrong” o “em”. Si no las eliminaba, el modelo habría interpretado que “classmarkup” es una palabra clave importantísima porque aparece en todos lados. He aplicado una expresión regular para eliminar estos residuos antes de la limpieza estándar.</p>
+<p>Normalización y Stopwords, Una vez limpio el “ruido digital”, he aplicado el preprocesado clásico con la librería tidytext:</p>
+<p><strong>Normalización:</strong> He transformado todo a minúsculas para que “Data” y “data” cuenten como lo mismo.</p>
+<p><strong>Eliminación de números y puntuación:</strong> No me interesa saber cuántos artículos tienen un “10” o un signo de exclamación.</p>
+<p><strong>Stopwords:</strong> He eliminado las palabras vacías del inglés (artículos, preposiciones, pronombres) que tienen mucha frecuencia pero carga semántica nula.</p>
+<p>El último paso ha sido la creación de la Matriz Documento-Término (DTM) con los “tokens” ya limpios, he construido la Matriz Documento-Término. El resultado es una matriz dispersa donde cada fila es un artículo de Medium y cada columna es una palabra de nuestro vocabulario.</p>
+<p>Para evitar que la matriz fuera gigantesca e inmanejable, he aplicado un pequeño filtro el cual elmina aquellos términos que aparecen en poquísimos documentos, ya que suelen ser erratas o nombres propios muy raros que no ayudan a definir un tópico general. Ahora sí, con la matriz lista, el terreno estaba preparado para ajustar los modelos LDA.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.6
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.2.0     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Cargando paquete requerido: NLP
+
+Adjuntando el paquete: 'NLP'
+
+The following object is masked from 'package:ggplot2':
+
+    annotate</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(topicmodels)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ldatuning)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Package version: 4.3.1
+Unicode version: 15.1
+ICU version: 74.1
+Parallel computing: 16 of 16 threads used.
+See https://quanteda.io for tutorials and examples.
+
+Adjuntando el paquete: 'quanteda'
+
+The following object is masked from 'package:tm':
+
+    stopwords
+
+The following objects are masked from 'package:NLP':
+
+    meta, meta&lt;-</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seededlda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Adjuntando el paquete: 'seededlda'
+
+The following object is masked from 'package:quanteda':
+
+    info_tbb
+
+The following objects are masked from 'package:topicmodels':
+
+    perplexity, terms, topics
+
+The following object is masked from 'package:stats':
+
+    terms</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"medium_data.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>clean_corpus <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(subtitle), <span class="st">""</span>, subtitle),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">paste</span>(title, subtitle),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">str_replace_all</span>(text, <span class="st">"&lt;.*?&gt;"</span>, <span class="st">" "</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">str_replace_all</span>(text, <span class="st">"http</span><span class="sc">\\</span><span class="st">S+"</span>, <span class="st">" "</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">str_replace_all</span>(text, <span class="st">"classmarkup[a-z0-9]+"</span>, <span class="st">" "</span>), </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">tolower</span>(text),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">removeNumbers</span>(text),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">removePunctuation</span>(text),</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">str_squish</span>(text) </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">nchar</span>(text) <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, text, publication, claps)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  Tokenización y Stopwords</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>tokens <span class="ot">&lt;-</span> clean_corpus <span class="sc">%&gt;%</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text) <span class="sc">%&gt;%</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"medium"</span>, <span class="st">"article"</span>, <span class="st">"read"</span>, <span class="st">"strong"</span>, <span class="st">"em"</span>, <span class="st">"href"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrado de términos raros (Pruning)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>word_counts <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(id, word) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(word) <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">doc_freq =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(doc_freq <span class="sc">&gt;=</span> <span class="dv">5</span>) </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Creación de la Matriz (DTM)</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> word_counts <span class="sc">%&gt;%</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cast_dtm</span>(id, word, n)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>tokens <span class="sc">%&gt;%</span> <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       word   n
+1      data 525
+2  learning 379
+3   writing 301
+4    design 241
+5   machine 226
+6        ux 202
+7      life 192
+8    python 192
+9        ai 181
+10     time 164</code></pre>
+</div>
+</div>
+<p>Tras aplicar el proceso de limpieza y filtrado,estas son las 10 palabras más frecuentes del corpus global para validar la calidad de los datos. Como se observa en la tabla, se han eliminado correctamente las <em>stopwords</em> y el ruido HTML.</p>
+<p>El vocabulario resultante revela la naturaleza híbrida de Medium. Observamos una clara predominancia de términos técnicos asociados a la Ciencia de Datos como data, machine o python, seguidos por el ámbito del Diseño design y ux. Sin embargo, la alta frecuencia de palabras como writing, life y time sugiere que el corpus no es puramente técnico, sino que incluye una fuerte componente de artículos sobre productividad, estilo de vida y el propio oficio de escribir, algo típico de la plataforma.</p>
+</section>
+<section id="ajuste-de-modelos-lda" class="level2">
+<h2 class="anchored" data-anchor-id="ajuste-de-modelos-lda">Ajuste de Modelos LDA</h2>
+<p>Una vez depurado el vocabulario, el siguiente paso es transformar el texto no estructurado en algo procesable, para poder trabajar. Para ello, construimos la Matriz Documento-Término (DTM), una estructura donde cada fila representa un artículo y cada columna un término del vocabulario limpio.</p>
+<p>Para descubrir la estructura semántica latente del corpus, utilizaremos el algoritmo Latent Dirichlet Allocation (LDA). Dado que desconocemos a priori el número exacto de temas que componen la colección de artículos, es importante realizar una exploración estadística previa. Antes de definir nuestros modelos finales, evaluaremos distintas métricas de densidad y coherencia para estimar qué rango de valores de K ofrece el mejor ajuste a la realidad de nuestros textos, para ello utilizaré métricas como perplexity o coherence/exclusivity.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">FindTopicsNumber</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  dtm,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">topics =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">2</span>, <span class="at">to =</span> <span class="dv">20</span>, <span class="at">by =</span> <span class="dv">1</span>), </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"CaoJuan2009"</span>, <span class="st">"Deveaud2014"</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"Gibbs"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">1234</span>),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mc.cores =</span> <span class="dv">2</span>L, <span class="co"># Usa núcleos de tu CPU para ir más rápido (pon 2 o 4)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>fit models... done.
+calculate metrics:
+  CaoJuan2009... done.
+  Deveaud2014... done.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FindTopicsNumber_plot</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>VIendo el gráfico podemos determinar cuáles son los valores óptimos de k, tenemos que mirar los valores donde Caojuan2009 se minimza y Deveaud2014 se maximiza, este valor de k es el que mayor coherencia y menor redundancia nos proporcionará. En este caso es K = 4, este sería el mejor valor de k para nuestro corpus, pero también vamos a probar k = 6.</p>
+<p>Modelo A (visión general, K=4): En este primer modelo usamos una configuración bastante conservadora, con el objetivo de identificar las grandes tendencias generales del corpus. La idea es que el algoritmo agrupe los textos en categorías amplias que funcionen como contenedores temáticos, como por ejemplo Tecnología, Diseño, Negocios o Estilo de vida.</p>
+<p>Modelo B (visión intermedia, K=6): Al aumentar el número de tópicos, buscamos descomponer esas categorías generales y empezar a ver diferencias más claras entre áreas profesionales. En este nivel esperamos que ámbitos amplios como la Tecnología se dividan en disciplinas más concretas, por ejemplo desarrollo de software frente a análisis de datos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertimos la tabla de tokens limpios a una Matriz DTM</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> tokens <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(id, word) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cast_dtm</span>(id, word, n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para la inferencia de los tópicos hemos seleccionado el método de muestreo de Gibbs (<em>Gibbs Sampling</em>) en lugar de la aproximación variacional. Tal y como hemos visto en clase, el muestreo de Gibbs opera simulando iterativamente la asignación de palabras a temas hasta que la distribución se estabiliza. Aunque este proceso es computacionalmente más intensivo, lo hemos priorizado porque, en corpus de tamaño medio y textos naturales como los de Medium, tiende a producir tópicos más estables, interpretables y coherentes, evitando los óptimos locales en los que a veces queda atrapado el método variacional.</p>
+<p>A continuación, ejecutamos los dos modelos seleccionados K = 4 y K = 6 fijando una semilla aleatoria para garantizar la total reproducibilidad de los resultados.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>semilla <span class="ot">&lt;-</span> <span class="dv">1234</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>lda_4 <span class="ot">&lt;-</span> topicmodels<span class="sc">::</span><span class="fu">LDA</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  dtm,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">4</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"Gibbs"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> semilla, <span class="at">iter =</span> <span class="dv">500</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>lda_6 <span class="ot">&lt;-</span> topicmodels<span class="sc">::</span><span class="fu">LDA</span>(</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  dtm,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">6</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"Gibbs"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> semilla, <span class="at">iter =</span> <span class="dv">500</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Una vez ajustados los modelos, procedemos a examinar su estructura semántica. Para ello, extraemos la matriz beta, que representa la probabilidad de que cada palabra pertenezca a un tópico determinado. Visualizamos los términos con mayor peso para identificar las etiquetas temáticas de cada grupo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>topics_beta_4 <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_4, <span class="at">matrix =</span> <span class="st">"beta"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>top_terms_4 <span class="ot">&lt;-</span> topics_beta_4 <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(beta, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>beta)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plot_k4 <span class="ot">&lt;-</span> top_terms_4 <span class="sc">%&gt;%</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">reorder_within</span>(term, beta, topic)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(beta, term, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> topic, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Modelo A (K=4): Palabras más probables"</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Visión general de los grandes bloques temáticos"</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Probabilidad Beta"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>plot_k4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al observar las palabras más representativas de este primer modelo, salta a la vista que el algoritmo ha captado los grandes temas de Medium, aunque con trazos muy gruesos. Sin ninguna pista previa, el modelo LDA ha conseguido agrupar los artículos en cuatro temáticas bastante reconocibles:</p>
+<p>El Tópico 1 parece hablar sobre emprendimiento, palabras como business, marketing, build o social apuntan claramente a artículos sobre cómo montar negocios y vender ideas.</p>
+<p>El Tópico 3 recoge el tema más humano, con términos como life, writing, lessons o story, agrupa todos esos posts sobre desarrollo personal, lecciones de vida e historias que cuenta la gente.</p>
+<p>El Tópico 4 es el más técnico, hablando de data, python, science y code nos dicen que aquí están los términos de programación y análisis de datos.</p>
+<p>Sin embargo, lo más interesante ocurre en el Tópico 2. Aquí el modelo nos mustra sus limitaciones al tener solo 4 categorías disponibles, ha mezclado conceptos de Diseño (design, ux) con conceptos de Inteligencia Artificial avanzada (machine, neural, deep learning). Para el algoritmo, ambos son temas técnicos, y al no poder dividirlos, los ha fusionado en uno solo. Es por eso que necesitamos aumentar el número de tópicos (K=6) y ver si logramos que el diseño y la ingeniería se separen en tópicos distintos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>topics_beta_6 <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_6, <span class="at">matrix =</span> <span class="st">"beta"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>top_terms_6 <span class="ot">&lt;-</span> topics_beta_6 <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(beta, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>beta)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>plot_k6 <span class="ot">&lt;-</span> top_terms_6 <span class="sc">%&gt;%</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">reorder_within</span>(term, beta, topic)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(beta, term, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> topic, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Modelo B (K=6): Palabras más probables"</span>,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Desglose intermedio en 6 grandes bloques"</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Probabilidad Beta"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>plot_k6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al aumentar la granularidad a 6 tópicos, se nota claramente una mejora en cómo quedan definidos los temas. Ya que el algoritmo ahora tiene más variedad a la hora de dividir los temas, lo que le permite separar conceptos que en el Modelo A aparecían mezclados. Esto confirma que el corpus es más complejo y rico de lo que parecía en una primera visión general.</p>
+<p>La separación más notoria ha sido la de diseño e IA, el mayor acierto de este modelo es haber separado el antiguo bloque técnico en dos áreas bien diferenciadas. Por un lado, aparece el Tópico 2, centrado exclusivamente en Diseño de Producto y UX (design, ux, product, user), y por otro el Tópico 4, enfocado en la parte más teórica de la Inteligencia Artificial (machine learning, deep, neural, model). El modelo consigue captar que diseñar experiencias de usuario no es lo mismo que trabajar con modelos de aprendizaje automático.</p>
+<p>La especialización de los datos, en el tópico 1 se define claramente como el núcleo de Ciencia de Datos y startups (data, science, analysis, startup), diferenciándose de la programación más técnica. Es un tema más orientado al análisis y a la toma de decisiones en contextos de negocio.</p>
+<p>Marketing y negocios, es el Tópico 3, que agrupa contenidos relacionados con marketing y estrategia (marketing, business, social, create), separándolos del contenido puramente técnico. Aquí se mezclan temas de creación de contenido, redes sociales y visión empresarial.Temas híbridos</p>
+<p>Los Tópicos 5 y 6 son especialmente interesantes por su carácter más específico. El Tópico 6 está muy ligado a Python, pero también incluye términos como life o lessons, lo que sugiere que muchos artículos de programación en Medium adoptan un enfoque más personal, tipo “lecciones aprendidas”. Por su parte, el Tópico 5 parece centrarse en tutoriales técnicos y escritura sobre código (writing, code, introduction), funcionando como un punto intermedio entre lo narrativo y lo técnico.</p>
+<p>En conclusión el aumento de k a 6 ha sido todo un acierto ya que, de esta manera conseguimos que divida mejor los temas, y no nos quedemos demasiado cortos y tenga que mezclar temas. Además vemos una mejora en los mátices dentro de los datos, como la diferencia entre análisis y programacion de python.</p>
+</section>
+<section id="análisis-matriz-gamma" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-matriz-gamma">Análisis matriz gamma</h2>
+<p>Hasta ahora hemos intentado interpretar los temas analizando palabras aisladas (Matriz Beta). Sin embargo, las palabras pueden ser ambiguas fuera de contexto, por ejemplo, “model” puede referirse a una pasarela de moda o a algo más técnico. Para confirmar nuestras etiquetas temáticas y validar la coherencia del modelo, es imprescindible leer los documentos reales.</p>
+<p>En esta sección analizamos la matriz Gamma, que indica la probabilidad de pertenencia de cada artículo a un tópico. Al extraer y leer los títulos de los 3 artículos más representativos (aquellos con mayor gamma) de cada grupo del Modelo B K = 4 y K = 6, podemos confirmar definitivamente la semántica de cada tópico.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>doc_topics <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_4, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>top_docs <span class="ot">&lt;-</span> doc_topics <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(gamma, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>gamma)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>top_docs_con_titulo_4 <span class="ot">&lt;-</span> top_docs <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">as.character</span>(document)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(clean_corpus <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, text), </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"document"</span> <span class="ot">=</span> <span class="st">"id"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Artículos más representativos del Modelo General (K=4)</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Tópico</th>
+<th style="text-align: center;">Probabilidad (Gamma)</th>
+<th style="text-align: left;">Título del Artículo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.355</td>
+<td style="text-align: left;">pr pro shares four mistakes to avoid when pitching the media — yfs …</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.353</td>
+<td style="text-align: left;">google’s revenues are declining should investors worry — market mad…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.347</td>
+<td style="text-align: left;">elixir release with distillery a real example of creating release b…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.369</td>
+<td style="text-align: left;">comparison of activation functions for deep neural networks activat…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.364</td>
+<td style="text-align: left;">an introduction to convolutional neural networks a convolutional ne…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.358</td>
+<td style="text-align: left;">notes on artificial intelligence ai machine learning ml and deep le…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.358</td>
+<td style="text-align: left;">extending pytorch with custom activation functions a tutorial for p…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.358</td>
+<td style="text-align: left;">a step method for making quicker and better decisions jump into wha…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.353</td>
+<td style="text-align: left;">how writing words a day changed my life i knew that writing every d…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.342</td>
+<td style="text-align: left;">tips for startup founders who just started their first product mana…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.358</td>
+<td style="text-align: left;">automatically analyzing laboratory test data how to write python pr…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.347</td>
+<td style="text-align: left;">from pandas to pyspark with koalas the koalas project makes data sc…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.347</td>
+<td style="text-align: left;">ecom data series what is data science for ecommerce data science is…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>La tabla anterior nos permite ponerle “nombre y apellidos” a las categorías que ya habíamos identificado antes. Al revisar los títulos con mayor probabilidad de pertenecer a cada tópico podemos comprobar que el Modelo A es bastante coherente a nivel semántico.</p>
+<p>Tópico 1 (Negocios y actualidad): Los artículos más representativos encajan bien con la etiqueta de “Negocios”. Aparecen textos relacionados con relaciones públicas (“pr pro shares four mistakes…”) y con finanzas corporativas (“google’s revenues are declining”). Llama la atención que también se incluyan noticias sobre lanzamientos de software (“elixir release…”), lo que sugiere que, en este modelo más general, el algoritmo agrupa tanto los negocios como la actualidad del sector tecnológico en un mismo bloque.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>doc_topics <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_6, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>top_docs <span class="ot">&lt;-</span> doc_topics <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(gamma, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>gamma)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>top_docs_con_titulo_6 <span class="ot">&lt;-</span> top_docs <span class="sc">%&gt;%</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">as.character</span>(document)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(clean_corpus <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, text), </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"document"</span> <span class="ot">=</span> <span class="st">"id"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Artículos más representativos del Modelo General (K=6)</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Tópico</th>
+<th style="text-align: center;">Probabilidad (Gamma)</th>
+<th style="text-align: left;">Título del Artículo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.277</td>
+<td style="text-align: left;">tips for effective data visualization exploring the good the bad an…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.277</td>
+<td style="text-align: left;">how to quickly compare data sets how to get a quick summary of any …</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.268</td>
+<td style="text-align: left;">amazon music unlimited hd totally crushes tidal finally flac but wi…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.333</td>
+<td style="text-align: left;">the stages of the design craft — and more ux links this week a week…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.308</td>
+<td style="text-align: left;">design system governance better buttons figma ninja — and more ux t…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.302</td>
+<td style="text-align: left;">designing for better digital nutrition — and more ux links this wee…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">i almost bought a k vip motorcycling weekend — and i don’t ride a r…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.256</td>
+<td style="text-align: left;">your marketing works best when it’s simple a lesson from a boy sell…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.256</td>
+<td style="text-align: left;">you choose how you react it’s the most powerful gift you have it’s …</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.256</td>
+<td style="text-align: left;">giving up social media for days social media sites keep us scrollin…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.277</td>
+<td style="text-align: left;">deep learning in space how ai and machine learning can support spac…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.268</td>
+<td style="text-align: left;">reinventing malls for the ai age globally few billions of people vi…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">ai fairness — explanation of disparate impact remover introduction …</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">early lung cancer detection with ai a guide for patients understand…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">machine learning and artificial intelligence for content publishers…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">reinforcement learning — multiarm bandit implementation multiarm ba…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">deep learning for iceberg detection in satellite images how can dee…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">how to overcome bias in a racist sexist world we all suffer from un…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.289</td>
+<td style="text-align: left;">what is nlp natural language processing natural language processing…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.282</td>
+<td style="text-align: left;">initializing neural networks learn how to initialize neural network…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.277</td>
+<td style="text-align: left;">rules for user signup journeys the signinsign up step is a big hurd…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.264</td>
+<td style="text-align: left;">linear regression the basics regression techniques help you measure…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.260</td>
+<td style="text-align: left;">linear regression models a guide for better understanding linear re…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.251</td>
+<td style="text-align: left;">exploring airbnb prices in london which factors influence price exp…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Al analizar los artículos con mayor probabilidad de pertenencia gamma en el Modelo B, se confirma que aumentar la granularidad ha sido una decisión acertada. A diferencia del modelo más general K = 4, en este caso se observa una separación mucho más clara entre disciplinas, lo que hace que los tópicos sean más fáciles de interpretar.</p>
+<p>En el modelo anterior, el diseño aparecía mezclado con la ingeniería. Sin embargo, aquí el Tópico 2 está claramente centrado en Diseño y UX. Títulos como “the stages of the design craft” o “design system governance” muestran que el algoritmo ha conseguido aislar el contenido propio de la comunidad de diseñadores, diferenciándolo claramente del de los programadores.</p>
+<p>Lo que antes aparecía como un gran bloque genérico de “Tecnología” ahora se divide en varios niveles de profundidad, lo que aporta mucha más información:</p>
+<p>Tópico 6 (Fundamentos): Reúne conceptos estadísticos básicos y tutoriales introductorios, como “linear regression: the basics”. Es un espacio muy orientado al aprendizaje inicial, típico de estudiantes o personas que están empezando.</p>
+<p>Tópico 1 (Análisis práctico): Se enfoca en el uso aplicado de los datos, especialmente en visualización y comparación de conjuntos de datos, con títulos como “effective data visualization” o “compare data sets”.</p>
+<p>Tópico 4 (IA avanzada): Representa el nivel más especializado. Aquí aparecen temas de deep learning y aplicaciones avanzadas de la inteligencia artificial, incluso en ámbitos como la medicina, por ejemplo “early lung cancer detection with AI” o “reinforcement learning”.</p>
+<p>Viendo el contenido del tópic 3, podemos observar que en un mismo tópic, tenemos dos temas diferentes como pueden ser las anécdotas personales y otras historias e ideas más relacionadas con negocios como puede ser de marketing, esto me hace pensar que podría probar a añadir un valor de k más alto para dividir estos dos temas, en este caso vamos a trabajar en un valor de K = 7.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lda_7 <span class="ot">&lt;-</span> topicmodels<span class="sc">::</span><span class="fu">LDA</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  dtm,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">7</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"Gibbs"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">seed =</span> semilla, <span class="at">iter =</span> <span class="dv">500</span>, <span class="at">verbose =</span> <span class="dv">0</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>topics_beta_7 <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_7, <span class="at">matrix =</span> <span class="st">"beta"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>top_terms_7 <span class="ot">&lt;-</span> topics_beta_7 <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(beta, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>beta)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>plot_k7 <span class="ot">&lt;-</span> top_terms_7 <span class="sc">%&gt;%</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">reorder_within</span>(term, beta, topic)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(beta, term, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> topic, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reordered</span>() <span class="sc">+</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Modelo A (K=4): Palabras más probables"</span>,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Visión general de los grandes bloques temáticos"</span>,</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Probabilidad Beta"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>plot_k7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al analizar la distribución de las palabras clave en este nuevo modelo, se observa claramente la aparición de un séptimo tópico que antes quedaba oculto o mezclado con otros. Este tópico, definido por términos como writing, life, people o day, recoge de forma bastante clara contenidos relacionados con el desarrollo personal y la escritura.</p>
+<p>El resto de los bloques temáticos, tanto técnicos como de negocio, se mantienen bastante estables con respecto al modelo anterior, aunque con ligeros cambios de orden. Este resultado es interesante desde el punto de vista metodológico, ya que sugiere que, aunque las métricas cuantitativas (como coherence o exclusivity) apuntaban a que lo ideal era quedarse en 4 o 6 tópicos, un análisis cualitativo más detallado muestra que K = 7 es, en realidad, la mejor opción.</p>
+<p>Al introducir este tópico adicional, conseguimos separar claramente los artículos de estilo de vida y desarrollo personal de los de negocios, evitando la “mezcla” semántica que se producía cuando ambos tipos de contenido se forzaban a convivir dentro del mismo grupo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>doc_topics <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_7, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>top_docs <span class="ot">&lt;-</span> doc_topics <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(gamma, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>gamma)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>top_docs_con_titulo_7 <span class="ot">&lt;-</span> top_docs <span class="sc">%&gt;%</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">as.character</span>(document)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(clean_corpus <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(id, text), </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"document"</span> <span class="ot">=</span> <span class="st">"id"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Artículos más representativos del Modelo General (K=7)</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Tópico</th>
+<th style="text-align: center;">Probabilidad (Gamma)</th>
+<th style="text-align: left;">Título del Artículo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.252</td>
+<td style="text-align: left;">how to break a bad habit learn how to break a bad habit by followin…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.248</td>
+<td style="text-align: left;">pr pro shares four mistakes to avoid when pitching the media — yfs …</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.240</td>
+<td style="text-align: left;">elixir release with distillery a real example of creating release b…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.299</td>
+<td style="text-align: left;">the stages of the design craft — and more ux links this week a week…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.276</td>
+<td style="text-align: left;">respect is the one value — and more ux links this week a weekly sel…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.275</td>
+<td style="text-align: left;">design system governance better buttons figma ninja — and more ux t…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.275</td>
+<td style="text-align: left;">design tokens irritating uis search microcopy — and more ux this we…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.231</td>
+<td style="text-align: left;">how to adjust detectnet an object detection architecture created by…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.227</td>
+<td style="text-align: left;">how to build a rest api in laravel this tutorial will take you thro…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.227</td>
+<td style="text-align: left;">bar chart and pie chart show using retrofit rest api in android</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.232</td>
+<td style="text-align: left;">reinventing malls for the ai age globally few billions of people vi…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.231</td>
+<td style="text-align: left;">powerful trust signals to unlock your fintech startups growth</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.231</td>
+<td style="text-align: left;">what tv show has the best of the best episodes on imdb breaking bad…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.257</td>
+<td style="text-align: left;">an introduction to convolutional neural networks a convolutional ne…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.257</td>
+<td style="text-align: left;">reinforcement learning — multiarm bandit implementation multiarm ba…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.252</td>
+<td style="text-align: left;">can machine learning model simple math functions modelling some fun…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.240</td>
+<td style="text-align: left;">rules for user signup journeys the signinsign up step is a big hurd…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: left;">web scraping a less brief overview of scrapy and selenium part ii s…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: left;">got data science jobs the challenges of landing that first offer po…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: left;">pyspark – demand forecasting data science project a full guide for …</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: left;">web scraping with python using selenium basic steps on scraping web…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: left;">secure code review and penetration testing of nodejs and javascript…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0.244</td>
+<td style="text-align: left;">write to start the day write to accomplish and write to avoid procr…</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0.235</td>
+<td style="text-align: left;">how not to write when to ignore writing advice is the best writing …</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0.235</td>
+<td style="text-align: left;">writer’s write and they don’t yes to be a ‘writer’ you need to writ…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>La lectura de los artículos más representativos de este modelo confirma claramente nuestra hipótesis: era necesario separar mejor los tipos de contenido. La tabla muestra una especialización temática mucho más clara y coherente.</p>
+<p>Confirmación del Tópico 7 (escritura y vida), Los artículos con mayor probabilidad en este grupo no dejan lugar a dudas, con títulos como “write to start the day”, “how not to write” o “writer’s write”. Por fin se han aislado los textos de escritura y reflexión personal, que antes quedaban mezclados con otros temas más generales.</p>
+<p>El contenido del tópic 2 relacionado con diseño (“stages of the design craft”, “design tokens”) se mantiene claramente separado de la programación, lo que refuerza la solidez del modelo.</p>
+<p>Diferenciación técnica (Tópico 5 vs.&nbsp;Tópico 6), ell modelo también distingue bien entre el deep learning más teórico (Tópico 5, con redes neuronales y reinforcement learning) y un enfoque más aplicado de data science y web (Tópico 6, con web scraping o salidas profesionales).</p>
+<p>En conjunto, el modelo de 7 tópicos es el que mejor representa la realidad del corpus. Captura mejor las diferencias técnicas y, sobre todo, da un espacio propio a la comunidad de escritores de Medium, separándola del contenido empresarial.</p>
+</section>
+<section id="mejora-del-modelo-enfoque-semi-supervisado" class="level2">
+<h2 class="anchored" data-anchor-id="mejora-del-modelo-enfoque-semi-supervisado">Mejora del modelo: Enfoque semi-supervisado</h2>
+<p>Tras haber determinado mediante la inspección cualitativa que la estructura latente más coherente del corpus se compone de 7 temas, damos un paso más allá para refinar la clasificación. Aunque el modelo estándar, no-supervisado, ha funcionado bien, todavía podemos observar algo de ruido en artículos que podrían pertenecer a varias categorías a la vez.</p>
+<p>Para solucionar esto y obtener categorías más puras, implementaremos una estrategia semi-supervisada utilizando el algoritmo Seeded LDA. A diferencia del LDA tradicional, que adivina patrones desde cero, esta técnica nos permite inyectar una pequeña pista al modelo para mejorar sus resultados.</p>
+<p>El procedimiento consiste en definir un diccionario de palabras clave para cada uno de los 7 temas que ya hemos validado anteriormente. De esta forma, restringimos la libertad del algoritmo y lo forzamos a agrupar los textos alrededor de definiciones más estrictas, pasando de un enfoque puramente exploratorio a uno más preciso.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>topics_dict <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Data Analysis"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"data"</span>, <span class="st">"analysis"</span>, <span class="st">"visualization"</span>, <span class="st">"science"</span>, <span class="st">"analytics"</span>),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Design &amp; UX"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"design"</span>, <span class="st">"ux"</span>, <span class="st">"product"</span>, <span class="st">"user"</span>, <span class="st">"ui"</span>, <span class="st">"interface"</span>),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Marketing &amp; Biz"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"marketing"</span>, <span class="st">"business"</span>, <span class="st">"brand"</span>, <span class="st">"social"</span>, <span class="st">"strategy"</span>),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AI &amp; Deep Learning"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"neural"</span>, <span class="st">"network"</span>, <span class="st">"deep"</span>, <span class="st">"learning"</span>, <span class="st">"model"</span>, <span class="st">"ai"</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Coding &amp; Dev"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"code"</span>, <span class="st">"software"</span>, <span class="st">"development"</span>, <span class="st">"web"</span>, <span class="st">"api"</span>),</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Python &amp; Tools"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"python"</span>, <span class="st">"pandas"</span>, <span class="st">"scraping"</span>, <span class="st">"library"</span>, <span class="st">"automation"</span>),</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Writing &amp; Life"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"writing"</span>, <span class="st">"life"</span>, <span class="st">"lessons"</span>, <span class="st">"habits"</span>, <span class="st">"productivity"</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>dfm_obj <span class="ot">&lt;-</span> <span class="fu">as.dfm</span>(dtm)</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>seeded_model <span class="ot">&lt;-</span> <span class="fu">textmodel_seededlda</span>(</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dfm_obj,               </span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">dictionary =</span> <span class="fu">dictionary</span>(topics_dict),</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">valuetype =</span> <span class="st">"glob"</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">case_insensitive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Top 10 términos por Tópico (Modelo Supervisado)</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 18%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Data Analysis</th>
+<th style="text-align: left;">Design &amp; UX</th>
+<th style="text-align: left;">Marketing &amp; Biz</th>
+<th style="text-align: left;">AI &amp; Deep Learning</th>
+<th style="text-align: left;">Coding &amp; Dev</th>
+<th style="text-align: left;">Python &amp; Tools</th>
+<th style="text-align: left;">Writing &amp; Life</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">data</td>
+<td style="text-align: left;">design</td>
+<td style="text-align: left;">business</td>
+<td style="text-align: left;">learning</td>
+<td style="text-align: left;">it’s</td>
+<td style="text-align: left;">python</td>
+<td style="text-align: left;">writing</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">science</td>
+<td style="text-align: left;">ux</td>
+<td style="text-align: left;">marketing</td>
+<td style="text-align: left;">ai</td>
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">guide</td>
+<td style="text-align: left;">life</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">analysis</td>
+<td style="text-align: left;">product</td>
+<td style="text-align: left;">social</td>
+<td style="text-align: left;">deep</td>
+<td style="text-align: left;">code</td>
+<td style="text-align: left;">google</td>
+<td style="text-align: left;">lessons</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">project</td>
+<td style="text-align: left;">user</td>
+<td style="text-align: left;">strategy</td>
+<td style="text-align: left;">machine</td>
+<td style="text-align: left;">software</td>
+<td style="text-align: left;">build</td>
+<td style="text-align: left;">write</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top</td>
+<td style="text-align: left;">future</td>
+<td style="text-align: left;">startup</td>
+<td style="text-align: left;">neural</td>
+<td style="text-align: left;">don’t</td>
+<td style="text-align: left;">create</td>
+<td style="text-align: left;">productivity</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">time</td>
+<td style="text-align: left;">study</td>
+<td style="text-align: left;">brand</td>
+<td style="text-align: left;">model</td>
+<td style="text-align: left;">web</td>
+<td style="text-align: left;">pandas</td>
+<td style="text-align: left;">learned</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">analytics</td>
+<td style="text-align: left;">digital</td>
+<td style="text-align: left;">people</td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;">development</td>
+<td style="text-align: left;">creating</td>
+<td style="text-align: left;">day</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">visualization</td>
+<td style="text-align: left;">experience</td>
+<td style="text-align: left;">tech</td>
+<td style="text-align: left;">intelligence</td>
+<td style="text-align: left;">success</td>
+<td style="text-align: left;">step</td>
+<td style="text-align: left;">stop</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">series</td>
+<td style="text-align: left;">ui</td>
+<td style="text-align: left;">market</td>
+<td style="text-align: left;">networks</td>
+<td style="text-align: left;">api</td>
+<td style="text-align: left;">application</td>
+<td style="text-align: left;">story</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">real</td>
+<td style="text-align: left;">designer</td>
+<td style="text-align: left;">media</td>
+<td style="text-align: left;">artificial</td>
+<td style="text-align: left;">change</td>
+<td style="text-align: left;">building</td>
+<td style="text-align: left;">writer</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Mediante el análisis de la tabla podemos validar la robustez del modelo K = 7 al lograr una segmentación técnica más precisa. Se distingue claramente la teoría en AI &amp; Deep Learning (neural, model) de la ejecución práctica en Python &amp; Tools (guide, build), separando ambos bloques de la explotación de información en Data Analysis, enfocada en la visualización y analítica de datos.</p>
+<p>En el ámbito de negocio, el modelo desglosa la estrategia comercial en Marketing &amp; Biz (startup, brand) frente a la experiencia de producto en Design &amp; UX (user, interface). Finalmente, integra la dimensión humana: Writing &amp; Life recoge las habilidades blandas y lecciones de carrera (lessons, story), mientras que Coding &amp; Dev agrupa el desarrollo web general y el lenguaje más coloquial del corpus.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>doc_assignments <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">topic =</span> seededlda<span class="sc">::</span><span class="fu">topics</span>(seeded_model)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>doc_assignments <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(topic, n), <span class="at">y =</span> n, <span class="at">fill =</span> topic)) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Prevalencia de Temas (Seeded LDA)"</span>,</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Distribución de artículos según las etiquetas definidas manualmente"</span>,</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Número de artículos"</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al examinar la distribución de artículos por tópico en el gráfico anterior, podemos identificar una clara jerarquía en los intereses de la comunidad analizada. Lo primero que salta a la vista en el gráfico es que el contenido no es puramente técnico; de hecho, la categoría Writing &amp; Life es la más popular, superando la barrera de los 1.000 artículos. Esto sugiere que historias personales, lecciones de carrera y productividad son de los temas que más les gusta hablar.</p>
+<p>En el espectro tecnológico, observo que la Inteligencia Artificial (AI &amp; Deep Learning) se posiciona como el motor dominante. Es fascinante notar cómo este tema supera ampliamente a áreas más tradicionales como el desarrollo web o el diseño, lo que confirma que las tendencias de mercado actuales están dictando las tematicas predominantes del corpus.</p>
+<p>Por último, he detectado un patrón interesante respecto a la especialización. Mientras que los temas amplios y de gestión (Marketing, Diseño, Coding) mantienen un volumen alto y constante, los nichos instrumentales más específicos, como Python &amp; Tools y Data Analysis, aparecen con menor frecuencia al final de la lista. Esto indica que es más común encontrar discusiones generales sobre el futuro de la tecnología que tutoriales técnicos paso a paso.</p>
+</section>
+<section id="distribución-temática-por-fuente-editorial" class="level2">
+<h2 class="anchored" data-anchor-id="distribución-temática-por-fuente-editorial">Distribución temática por Fuente Editorial</h2>
+<p>Una vez definida la estructura semántica del corpus con nuestro modelo óptimo K = 7, es fundamental analizar cómo se distribuyen estos temas a través de las distintas fuentes de información.</p>
+<p>Para ello, recurrimos a la extracción de la matriz Gamma, la cual nos proporciona la probabilidad posterior de que un documento pertenezca a un tópico específico. Al cruzar esta distribución probabilística con los metadatos de los artículos, podemos perfilar cuantitativamente la identidad editorial de cada revista.</p>
+<p>El siguiente código procesa estas probabilidades para visualizar las tematicas de las publicaciones principales (como Towards Data Science o UX Collective), revelando qué tópicos prioriza cada medio en su estrategia de contenidos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>gamma_df <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lda_7, <span class="at">matrix =</span> <span class="st">"gamma"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>gamma_con_meta <span class="ot">&lt;-</span> gamma_df <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">as.character</span>(document)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(clean_corpus <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"document"</span> <span class="ot">=</span> <span class="st">"id"</span>))</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>gamma_con_meta <span class="sc">%&gt;%</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(publication, topic) <span class="sc">%&gt;%</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_gamma =</span> <span class="fu">mean</span>(gamma)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(publication <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Towards Data Science"</span>, <span class="st">"The Startup"</span>, <span class="st">"UX Collective"</span>,<span class="st">"Better Marketing"</span> ,<span class="st">"Writing Cooperative"</span>, <span class="st">"Better Human"</span>,<span class="st">"Data Driven Investor"</span> )) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(topic), <span class="at">y =</span> mean_gamma, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> publication, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribución temática por Publicación"</span>,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"¿Qué línea editorial sigue cada revista?"</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Tópico (1-7)"</span>,</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Prevalencia promedio"</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'publication'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(clean_corpus<span class="sc">$</span>publication)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Towards Data Science"    "UX Collective"          
+[3] "The Startup"             "The Writing Cooperative"
+[5] "Data Driven Investor"    "Better Marketing"       
+[7] "Better Humans"          </code></pre>
+</div>
+</div>
+<p>Al analizar la distribución temática por publicación, lo primero que podemos observar es una sorprendente homogeneidad en el ecosistema: no existen silos aislados, sino una red conectada donde las probabilidades se mantienen estables entre el 14% y 15%. Lejos de encontrar revistas que publiquen exclusivamente sobre un único tema, observo que todas las revistas publican blogs de todos los temas sin especializarse en uno en concreto, permitiendo que un mismo artículo pueda encajar en múltiples espacios si el enfoque es el adecuado.</p>
+<p>Sin embargo, al profundizar en los matices, emergen identidades muy marcadas. <em>UX Collective</em> se destaca como el caso más nítido de especialización, mostrando una fidelidad evidente al Tópico 2 (Design &amp; UX) y priorizando el diseño sobre cualquier otra disciplina. De forma similar, <em>Towards Data Science</em> valida su perfil técnico con un dominio de los temas de IA y programación, dejando en segundo plano la estrategia comercial pura para centrarse en la ingeniería y la ciencia de datos.</p>
+<p>Por último, he detectado un patrón de “generalismo” en gigantes como <em>The Startup</em> y <em>Data Driven Investor</em>. Estas publicaciones presentan distribuciones prácticamente planas, lo que confirma su rol como grandes contenedores editoriales donde convergen tecnología, negocios y crecimiento personal. Esto demuestra que, aunque existen nichos técnicos, la mayor parte del corpus fluye a través de plataformas transversales que buscan un equilibrio entre la habilidad técnica (“hard skills”) y la reflexión profesional (“soft skills”).</p>
+<p>Lo que me llama la atención de este gráfico es la distribución. La expectativa lógica sería encontrar “silos” estancos, donde una publicación técnica se limite exclusivamente al código y una de negocios al mercado. Sin embargo, mi análisis sugiere que la realidad de este corpus es mucho más compleja: los artículos no son textos académicos unidimensionales, sino narrativas híbridas. Un tutorial sobre <em>Python</em> rara vez es solo código; a menudo incluye contextos de negocio (Marketing) o consejos profesionales (Life), lo que obliga al modelo a asignar porcentajes a múltiples temas simultáneamente, diluyendo la especialización pura.</p>
+<p>Además, debemos considerar el funcionamiento matemático del propio modelo LDA. El algoritmo trabaja con probabilidades, no con absolutos, y rara vez asigna un 0% estricto a un tema. En su lugar, detecta o ruido de fondo semántico en casi todos los documentos. Esta sensibilidad matemática, combinada con la riqueza del lenguaje natural, genera esa base uniforme del 10-15% que observamos en todas las barras, confirmando que, en la divulgación digital actual, ningún tema existe en completo aislamiento.</p>
+</section>
+<section id="análisis-impacto" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-impacto">Análisis impacto</h2>
+<p>Hasta este punto, nuestro estudio se ha centrado en analizar la oferta de contenidos: hemos desglosado qué temas proponen los autores y cómo se distribuyen editorialmente. Sin embargo, para obtener una visión completa del ecosistema de Medium, es imprescindible analizar que es lo que quiere el público o lo que más gusta, es decir, cómo reacciona la audiencia ante estos temas.</p>
+<p>Para ello, incorporamos al análisis la variable “claps”, una métrica de interacción que funciona como proxy de la viralidad y la valoración del lector. El objetivo de esta sección es cruzar nuestra estructura semántica latente K = 7 con los datos de engagement para determinar si existe una correlación entre la temática y el éxito del artículo. ¿Valora la comunidad por igual un tutorial técnico complejo que una reflexión sobre productividad, o existen desigualdades estructurales en la “economía de la atención” de la plataforma?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>impacto_temas <span class="ot">&lt;-</span> gamma_df <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">as.character</span>(document)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(clean_corpus <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(id)), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"document"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(document) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(gamma, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>impacto_temas <span class="sc">%&gt;%</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(<span class="fu">factor</span>(topic), claps, <span class="at">FUN =</span> median), <span class="at">y =</span> claps, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outlier.alpha =</span> <span class="fl">0.3</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="co"># Muestra la caja y los outliers transparentes</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span> </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribución de Engagement por Tópico"</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Escala logarítmica: Mediana (línea negra) y potencial viral (puntos)"</span>,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Tópico"</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Número de Aplausos (Log scale)"</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in scale_y_log10(): log-10 transformation introduced infinite values.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 185 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TAREA_4_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al analizar el gráfico de distribución, lo que más me sorprende es la igualdad de oportunidades. Las medianas están muy alineadas en torno a los 100-150 aplausos, lo que indica que el rendimiento base es muy similar para todos, ya escribas sobre código complejo o sobre estrategia de negocios.</p>
+<p>Sin embargo, hay un ganador claro en estabilidad: el Tópic 7 (<em>Writing &amp; Life</em>) muestra la mediana más alta, confirmándose como la apuesta más segura para garantizar un mínimo de audiencia. Por el contrario, los temas puramente técnicos como el Tópic 6 tienen un suelo un poco más bajo, reflejando la dificultad de conectar con el gran público, esto también se debe a que los temas más técnicos tienen un público menor y mas especifico mientras que temas de la vida tiene un público mucho más amplio.</p>
+<p>Pero lo más alentador son los puntos dispersos a la derecha (los <em>outliers</em>). El gráfico demuestra que no existe un techo para lo técnico: todos los temas, sin excepción, tienen artículos virales que superan los 10.000 aplausos.</p>
+</section>
+<section id="conclusión" class="level2">
+<h2 class="anchored" data-anchor-id="conclusión">Conclusión</h2>
+<p>Tras finalizar el estudio, podemos confirmar que hemos conseguido transformar un corpus con 6500 titulars y subtitulares de blogs en un mapa estructurado de las tematicas que se abarcan en estos. El modelo LDA, ajustado finalmente a K = 7, ha demostrado ser la herramienta ideal para descubrir la estructura oculta de Medium, revelando que la plataforma se sostiene sobre dos grandes pilares. Uno técnico liderado por la IA y el Diseño y uno humano centrado en la escritura y las lecciones de vida.</p>
+<p>Sin embargo, el hallazgo que más me ha sorprendido ha sido el comportamiento de las editoriales. Al visualizar la distribución de temas por revista, esperaba encontrar silos cerrados, donde las publicaciones técnicas solo hablaran de código y las de negocios solo de mercado.</p>
+<p>Lo que he encontrado es muy distinto, todas las editoriales mantienen una probabilidad base muy similar de tratar cualquier tema. Esto me deja con la duda de si realmente mi modelo de LDA ha conseguido captar a la prefección los temas de los que se habla en la plataforma y de si sabe distribuirlos entre las diferentes editoriales correctamente.</p>
+<p>Por último, el análisis de impacto ha cerrado el círculo demostrando una clara jerarquía de viralidad. He podido confirmar que escribir sobre “Writing &amp; Life” es la apuesta más segura, ya que ofrece una audiencia base más estable y alta.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

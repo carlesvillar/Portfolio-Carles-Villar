@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carles Villar | Data Engineer & Systems</title>
+
+    <!-- Fonts: Inter (Grotesk) and Fira Code (Monospace) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Noise overlay for materiality -->
+    <div class="noise"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <span class="logo font-mono text-accent">{C.Villar}</span>
+            <div class="nav-links">
+                <a href="#solucion">Enfoque</a>
+                <a href="#proyectos">Evidencia</a>
+                <a href="#servicios">Stack</a>
+                <a href="#contacto" class="btn btn-outline btn-sm">Agendar Llamada</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. Apertura (Hero) -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="badge font-mono fade-in-up" style="--delay: 0.1s">
+                <span class="badge-dot"></span> 4 Años de Inmersión Analítica & Sistemas
+            </div>
+            <h1 class="hero-title fade-in-up" style="--delay: 0.2s">Arquitectura de Datos <br><span
+                    class="text-accent">que Escala.</span></h1>
+            <p class="hero-subtitle fade-in-up" style="--delay: 0.3s">Diseño infraestructura sólida, pipelines
+                resilientes y consultas optimizadas. Transformando datos brutos en activos precisos y de baja latencia.
+            </p>
+
+            <div class="hero-actions fade-in-up" style="--delay: 0.4s">
+                <a href="#contacto" class="btn btn-primary">Iniciar Proyecto</a>
+                <a href="#proyectos" class="btn btn-secondary">Ver Código & Evidencia</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Problema -> Solución -->
+    <section id="solucion" class="section">
+        <div class="container dual-col">
+            <div class="col-left reveal-left">
+                <div class="label font-mono text-muted mb-2">/ Status Quo.</div>
+                <h2 class="h2 mb-4">La deuda técnica ahoga el análisis.</h2>
+                <ul class="bullet-list problem-list">
+                    <li>Consultas pesadas que bloquean la operativa en producción.</li>
+                    <li>Pipelines ETL frágiles que se rompen con cada esquema nuevo.</li>
+                    <li>Silos de datos sin trazabilidad, métricas duplicadas y falta de gobierno.</li>
+                </ul>
+            </div>
+            <div class="col-right reveal-right">
+                <div class="label font-mono text-accent mb-2">/ Target State.</div>
+                <h2 class="h2 mb-4">Ingeniería robusta y determinista.</h2>
+                <ul class="bullet-list solution-list">
+                    <li>Models relacionales optimizados y tuning de I/O en milisegundos.</li>
+                    <li>Extracción y carga automatizada con logging exhaustivo.</li>
+                    <li>Single Source of Truth integrado, validado y preparado para BI.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Cómo funciona (Timeline) -->
+    <section class="section bg-darker">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="h2">Metodología de Despliegue.</h2>
+                <p class="subtitle text-muted">Proceso estandarizado para sistemas críticos.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-step step-reveal">
+                    <div class="step-num font-mono">01.</div>
+                    <h3 class="step-title">Auditoría & Diagnóstico</h3>
+                    <p>Análisis de cuellos de botella en incesos, indexación, o modelos de ML subyacentes. Mapeo de
+                        latencias.</p>
+                </div>
+                <div class="timeline-step step-reveal">
+                    <div class="step-num font-mono">02.</div>
+                    <h3 class="step-title">Modelado & Desarrollo</h3>
+                    <p>Construcción del data warehouse o pipeline en SQL/R. Implementación de lógicas de transformación
+                        estructuradas.</p>
+                </div>
+                <div class="timeline-step step-reveal">
+                    <div class="step-num font-mono">03.</div>
+                    <h3 class="step-title">Despliegue & Monitoreo</h3>
+                    <p>Integración en capas de visualización (Power BI) y setup de alertas. Documentación técnica
+                        completa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Evidencia (Carrusel) -->
+    <section id="proyectos" class="section overflow-hidden">
+        <div class="container">
+            <h2 class="h2 mb-5">Resultados & Implementaciones.</h2>
+
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <div class="card-metric font-mono">~40% I/O Drop</div>
+                        <h4 class="card-title">Extracción Financiera</h4>
+                        <p class="text-muted">Desarrollo de scripts de captura sistemática para evaluación de
+                            estrategias de inversión complejas.</p>
+                        <a href="TAREA_2_CARLES_VILLAR.html" target="_blank" class="link-arrow">Ver documento &rarr;</a>
+                    </div>
+
+                    <div class="carousel-card">
+                        <div class="card-metric font-mono">+10k Nodes</div>
+                        <h4 class="card-title">Análisis de Sentimiento Crypto</h4>
+                        <p class="text-muted">Procesamiento masivo de texto estructurado en foros para catalogar
+                            tendencias del mercado.</p>
+                        <a href="TAREA 3.html" target="_blank" class="link-arrow">Ver análisis &rarr;</a>
+                    </div>
+
+                    <div class="carousel-card">
+                        <div class="card-metric font-mono">3x Sync Rate</div>
+                        <h4 class="card-title">Monitor Macros Power BI</h4>
+                        <p class="text-muted">Dashboard de seguimiento de inflación, oro e índices S&P500 con modelos de
+                            datos optimizados.</p>
+                        <a href="project_powerbi_inflation.html" target="_blank" class="link-arrow">Ver interactive
+                            &rarr;</a>
+                    </div>
+
+                    <div class="carousel-card">
+                        <div class="card-metric font-mono">NLP Engine</div>
+                        <h4 class="card-title">Clasificador Medium</h4>
+                        <p class="text-muted">Topic modeling implementado para extraer entidades y categorías desde
+                            repositorios de artículos crudos.</p>
+                        <a href="TAREA_4.html" target="_blank" class="link-arrow">Ver modelo &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Servicios -->
+    <section id="servicios" class="section bg-darker">
+        <div class="container">
+            <h2 class="h2 mb-5 text-center">Stack & Capacidades.</h2>
+            <div class="services-grid">
+                <div class="service-box">
+                    <div class="font-mono text-accent mb-2">[DB_TUNING]</div>
+                    <h3>Bases de Datos & SQL</h3>
+                    <p class="text-muted">Diseño de esquemas, normalización, índices, particionamiento y consultas
+                        transaccionales de alta eficiencia.</p>
+                </div>
+                <div class="service-box">
+                    <div class="font-mono text-accent mb-2">[ANALYTICS]</div>
+                    <h3>Business Intelligence</h3>
+                    <p class="text-muted">Modelado en estrella/copo de nieve, medidas DAX avanzadas y cuadros de mando
+                        inmersivos en Power BI.</p>
+                </div>
+                <div class="service-box">
+                    <div class="font-mono text-accent mb-2">[STAT_MODELS]</div>
+                    <h3>Scripts R / Python</h3>
+                    <p class="text-muted">Minería de datos, análisis pre-predictivo, depuración masiva y testing
+                        estadístico sobre dataframes pesados.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FAQ (Acordeón) -->
+    <section class="section">
+        <div class="container max-w-md">
+            <h2 class="h2 mb-4 text-center">Parámetros Comunes.</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q">¿Qué stack tecnológico dominas principalmente? <span
+                            class="icon">+</span></button>
+                    <div class="faq-a">
+                        <p>Mis herramientas root son SQL (PostgreSQL, SQL Server), R para modelado matemático, y Power
+                            BI para el capa semántica. Utilizo Python cuando requiero orquestación o extracción web.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">¿Puedes integrarte a un repositorio o equipo existente? <span
+                            class="icon">+</span></button>
+                    <div class="faq-a">
+                        <p>Absolutamente. Opero bajo metodologías ágiles, acostumbrado a ramas de control de versiones y
+                            estándares de revisión de código (code reviews).</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">¿Cubres infraestructura Cloud o solo On-Premise? <span
+                            class="icon">+</span></button>
+                    <div class="faq-a">
+                        <p>Mi enfoque actual principal es diseño lógico, pipelines y ETL a nivel código. Tengo nociones
+                            fundamentales de AWS y Azure, pero mi fuerte reside en la optimización de los flujos de
+                            datos per se.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">¿Disponibilidad geográfica y horaria? <span class="icon">+</span></button>
+                    <div class="faq-a">
+                        <p>Opero principalmente en remoto asíncrono con sincronizaciones clave durante hora CET. Abierto
+                            a relocalización si el proyecto de infraestructura lo demanda críticamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Cierre -->
+    <footer id="contacto" class="footer border-t border-glass">
+        <div class="container text-center py-6">
+            <h2 class="h2 mb-2">Deploy your next system.</h2>
+            <p class="text-muted mb-4">Evaluemos tu arquitectura en una sesión de 15 minutos. Sin compromiso técnico.
+            </p>
+            <a href="mailto:carlesvillar13@gmail.com" class="btn btn-primary mb-5" style="display:inline-flex">Ping /
+                Contacto Inicial</a>
+
+            <div class="footer-links font-mono text-sm">
+                <a href="Currículum Carles Villar (3).pdf" target="_blank" download>download_cv()</a>
+                <span class="text-muted mx-2">|</span>
+                <span class="text-muted">auth: carles_villar</span>
+                <span class="text-muted mx-2">|</span>
+                <span class="text-muted">sys_date: 2026</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

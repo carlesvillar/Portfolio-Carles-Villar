@@ -1,84 +1,100 @@
-/**
- * JS Main for Data Engineer Portfolio
- * Incorporates navbar scroll state, intersection observers for scroll animations,
- * infinite carousel duplication, and FAQ accordion logic.
- */
+const canvas = document.getElementById('data-background');
+const ctx = canvas.getContext('2d');
 
-document.addEventListener('DOMContentLoaded', () => {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-    // 1. Navigation background effect on scroll
-    const nav = document.querySelector('.nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.setAttribute('data-scrolled', 'true');
-        } else {
-            nav.setAttribute('data-scrolled', 'false');
-        }
-    });
+let particlesArray;
 
-    // 2. Intersection Observer for scroll animations (appearance)
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
-    };
-
-    const scrollObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                // Optional: stop observing once revealed
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe specific elements
-    const revealElements = document.querySelectorAll('.reveal-left, .reveal-right, .step-reveal');
-    revealElements.forEach((el, index) => {
-        // Add staggered delay for steps
-        if (el.classList.contains('step-reveal')) {
-            el.style.transitionDelay = `${index * 0.15}s`;
-        }
-        scrollObserver.observe(el);
-    });
-
-    // 3. Carousel infinite duplicate
-    // Clone cards to achieve seamless infinite animation
-    const carouselTrack = document.querySelector('.carousel-track');
-    if (carouselTrack) {
-        const cards = Array.from(carouselTrack.children);
-        // Duplicate the initial children to create the infinite loop effect
-        cards.forEach(card => {
-            const clone = card.cloneNode(true);
-            carouselTrack.appendChild(clone);
-        });
+// create particle
+class Particle {
+    constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
     }
+    // method to draw individual particle
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = '#00f3ff';
+        ctx.fill();
+    }
+    // check particle position, check mouse position, move the particle, draw the particle
+    update() {
+        //check if particle is still within canvas
+        if (this.x > canvas.width || this.x < 0) {
+            this.directionX = -this.directionX;
+        }
+        if (this.y > canvas.height || this.y < 0) {
+            this.directionY = -this.directionY;
+        }
 
-    // 4. Accordion Logic for FAQs
-    const faqButtons = document.querySelectorAll('.faq-q');
+        //move particle
+        this.x += this.directionX;
+        this.y += this.directionY;
+        //draw particle
+        this.draw();
+    }
+}
 
-    faqButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+// create particle array
+function init() {
+    particlesArray = [];
+    let numberOfParticles = (canvas.height * canvas.width) / 9000;
+    for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 1) - 0.5;
+        let directionY = (Math.random() * 1) - 0.5;
+        let color = '#00ffa3';
 
-            // Close all others (optional: strict single open)
-            /*
-            faqButtons.forEach(btn => {
-                btn.setAttribute('aria-expanded', 'false');
-                btn.nextElementSibling.style.maxHeight = null;
-            });
-            */
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    }
+}
 
-            // Toggle current
-            if (!isExpanded) {
-                button.setAttribute('aria-expanded', 'true');
-                const answer = button.nextElementSibling;
-                answer.style.maxHeight = answer.scrollHeight + "px";
-            } else {
-                button.setAttribute('aria-expanded', 'false');
-                button.nextElementSibling.style.maxHeight = null;
+function connect() {
+    let opacityValue = 1;
+    for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+            if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                opacityValue = 1 - (distance / 20000);
+                ctx.strokeStyle = 'rgba(0, 243, 255,' + opacityValue + ')';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                ctx.stroke();
             }
-        });
-    });
-});
+        }
+    }
+}
+
+// animation loop
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+    }
+    connect();
+}
+
+// resize event
+window.addEventListener('resize',
+    function () {
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        init();
+    }
+);
+
+init();
+animate();

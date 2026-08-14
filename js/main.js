@@ -1,100 +1,38 @@
-const canvas = document.getElementById('data-background');
-const ctx = canvas.getContext('2d');
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
 
-let particlesArray;
-
-// create particle
-class Particle {
-    constructor(x, y, directionX, directionY, size, color) {
-        this.x = x;
-        this.y = y;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.size = size;
-        this.color = color;
-    }
-    // method to draw individual particle
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#00f3ff';
-        ctx.fill();
-    }
-    // check particle position, check mouse position, move the particle, draw the particle
-    update() {
-        //check if particle is still within canvas
-        if (this.x > canvas.width || this.x < 0) {
-            this.directionX = -this.directionX;
-        }
-        if (this.y > canvas.height || this.y < 0) {
-            this.directionY = -this.directionY;
-        }
-
-        //move particle
-        this.x += this.directionX;
-        this.y += this.directionY;
-        //draw particle
-        this.draw();
-    }
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+            navToggle.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        });
+    });
 }
 
-// create particle array
-function init() {
-    particlesArray = [];
-    let numberOfParticles = (canvas.height * canvas.width) / 9000;
-    for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
-        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        let directionX = (Math.random() * 1) - 0.5;
-        let directionY = (Math.random() * 1) - 0.5;
-        let color = '#00ffa3';
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-    }
-}
-
-function connect() {
-    let opacityValue = 1;
-    for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
-                ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-            if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                opacityValue = 1 - (distance / 20000);
-                ctx.strokeStyle = 'rgba(0, 243, 255,' + opacityValue + ')';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                ctx.stroke();
+if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+    revealEls.forEach(el => el.classList.add('in-view'));
+} else {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target);
             }
-        }
-    }
+        });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
 }
-
-// animation loop
-function animate() {
-    requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-    }
-    connect();
-}
-
-// resize event
-window.addEventListener('resize',
-    function () {
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
-        init();
-    }
-);
-
-init();
-animate();

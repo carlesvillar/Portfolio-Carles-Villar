@@ -5,164 +5,236 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Carles Villar</title>
+    <meta name="description" content="Portfolio de Carles Villar, estudiante de Business Intelligence & Analítica de Negocios. Proyectos de análisis de datos con R, SQL y Power BI.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-    <canvas id="data-background"></canvas>
-    <div class="background-overlay"></div>
-
     <nav>
-        <a href="#" class="logo">CV.</a>
-        <ul class="nav-links">
-            <li><a href="#inicio">Inicio</a></li>
+        <a href="#inicio" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
             <li><a href="#proyectos">Proyectos</a></li>
             <li><a href="#habilidades">Habilidades</a></li>
-            <li><a href="#sobre-mi">Sobre Mí</a></li>
+            <li><a href="#sobre-mi">Sobre mí</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
+        <div class="nav-actions">
+            <a href="#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </nav>
 
     <section id="inicio" class="hero">
-        <h1>Carles Villar</h1>
-        <p class="hero-subtitle">Estudiante de BI & Data Analyst | Apasionado por la Innovación y la Estrategia de Datos
-            | Aprendiendo de la información de los datos</p>
-
-        <div class="hero-actions">
-            <a href="#proyectos" class="cta-btn">Ver Trabajos</a>
+        <div class="hero-content">
+            <h1>Carles<br>Villar</h1>
+            <span class="hero-badge">BI &amp; DATA ANALYST</span>
+            <p class="hero-subtitle">Transformo datos en decisiones. Graduado en Inteligencia y Analítica de Negocios,
+                con foco en modelado estadístico, visualización y resolución de problemas.</p>
+            <div class="hero-actions">
+                <a href="#proyectos" class="cta-btn">Ver proyectos</a>
+                <a href="CV_Carles_Villar.pdf" class="cta-btn secondary" download>
+                    <i class="fas fa-download"></i> Currículum
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img src="img/hero-bi.webp" width="1200" height="1200" alt="Ilustración de un analista trabajando con gráficos de datos en dos pantallas" fetchpriority="high">
         </div>
     </section>
 
     <section id="proyectos" class="section">
-        <h2 class="section-title"><i class="fas fa-project-diagram"></i> Mis Proyectos</h2>
+        <div class="section-header reveal">
+            <h2 class="section-title">Proyectos</h2>
+            <p class="section-desc">Trabajos de análisis, visualización y modelado predictivo aplicados a inversión,
+                mercados y comportamiento de comunidades online.</p>
+        </div>
         <div class="projects-grid">
-            <!-- TAREA 2 -->
-            <div class="project-card">
-                <i class="fas fa-chart-line icon"></i>
-                <h3>La extracción de datos como herramienta fundamental en la elaboración de estrategias de inversión
-                </h3>
-                <p>Análisis profundo sobre cómo la obtención de datos clave potencia la toma de decisiones financieras.
-                </p>
-                <a href="TAREA_2_CARLES_VILLAR.html" class="project-link" target="_blank">Ver Proyecto <i
-                        class="fas fa-arrow-right"></i></a>
+            <div class="project-card reveal">
+                <span class="project-tag"><i class="fas fa-rocket"></i> Machine learning</span>
+                <h3>Spaceship Titanic</h3>
+                <p>Un ensemble de nueve modelos alcanza 0,81014 de accuracy. Lo relevante fue demostrar que el
+                    problema tiene un techo de información en el 82% y localizar exactamente dónde está.</p>
+                <div class="project-links">
+                    <a href="proyectos/spaceship-titanic.html" class="project-link">Ver caso <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
 
-            <!-- TAREA 3 -->
-            <div class="project-card">
-                <i class="fab fa-bitcoin icon"></i>
-                <h3>Análisis de sentimiento en foros de inversión cripto</h3>
-                <p>Estudio de opinión pública y tendencias en comunidades de criptomonedas.</p>
-                <a href="TAREA 3.html" class="project-link" target="_blank">Ver Proyecto <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- TAREA 4 -->
-            <div class="project-card">
-                <i class="fab fa-medium icon"></i>
-                <h3>Análisis Temático foro medium</h3>
-                <p>Exploración y clasificación de temas relevantes discutidos en la plataforma Medium.</p>
-                <a href="TAREA_4.html" class="project-link" target="_blank">Ver Proyecto <i
-                        class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- PDF PROJECT -->
-            <div class="project-card">
-                <i class="fas fa-file-pdf icon"></i>
+            <div class="project-card reveal">
+                <span class="project-tag"><i class="fas fa-comments"></i> NLP · Producto</span>
                 <h3>Un puente digital hacia la inversión</h3>
-                <p>Democratizando las finanzas avanzadas frente a la crisis de coste de vida.</p>
-                <a href="Un puente digital hacia la inversión_ Democratizando las finanzas avanzadas frente a la crisis de coste de vida (1).pdf"
-                    class="project-link" target="_blank">Ver Documento <i class="fas fa-arrow-right"></i></a>
+                <p>4.229 comentarios de Reddit revelan dos lenguajes distintos entre los jóvenes españoles: el de la
+                    supervivencia y el de la estrategia. La distancia entre ambos no es de renta, sino de acceso.</p>
+                <div class="project-links">
+                    <a href="proyectos/horizonte-finanzas.html" class="project-link">Ver caso <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
 
-            <!-- Power BI Project -->
-            <div class="project-card">
-                <i class="fas fa-chart-pie icon"></i>
-                <h3>Análisis de Inflación</h3>
-                <p>Monitorización de indicadores económicos clave: IPC, evolución del Oro y S&P500.</p>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <a href="https://acrobat.adobe.com/id/urn:aaid:sc:EU:14f450ac-c9ef-4624-9d6e-7c1e0ea890aa"
-                        class="project-link" target="_blank">Ver PDF Interactivo <i class="fas fa-file-pdf"></i></a>
-                    <a href="Power bi/INFLACIÓN.pbix" class="project-link" download>Descargar .pbix <i
-                            class="fas fa-download"></i></a>
+            <div class="project-card reveal">
+                <span class="project-tag"><i class="fab fa-bitcoin"></i> NLP · Sentimiento</span>
+                <h3>¿Qué siente realmente un foro cripto?</h3>
+                <p>Dos métodos de análisis dieron respuestas opuestas sobre el mismo corpus. La discrepancia resultó
+                    ser el hallazgo: bajo el sarcasmo del foro hay un fondo medible de aversión al riesgo.</p>
+                <div class="project-links">
+                    <a href="proyectos/sentimiento-cripto.html" class="project-link">Ver caso <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <span class="project-tag"><i class="fab fa-medium"></i> NLP · Topic modeling</span>
+                <h3>Cuando la métrica y la lectura no coinciden</h3>
+                <p>Las métricas de coherencia señalaban cuatro tópicos en 6.500 artículos de Medium. Leer los textos
+                    demostró que eran siete, y que las editoriales no se especializan como cabría esperar.</p>
+                <div class="project-links">
+                    <a href="proyectos/temas-medium.html" class="project-link">Ver caso <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <span class="project-tag"><i class="fas fa-diagram-project"></i> Scraping · Automatización</span>
+                <h3>Cruzar precio y noticias para priorizar oportunidades</h3>
+                <p>Pipeline con R, n8n y Firecrawl que puntúa activos combinando variación de precio y sentimiento de
+                    los titulares, para separar movimientos respaldados de movimientos especulativos.</p>
+                <div class="project-links">
+                    <a href="proyectos/scraping-inversion.html" class="project-link">Ver caso <i
+                            class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="habilidades" class="section">
-        <h2 class="section-title"><i class="fas fa-code"></i> Habilidades Técnicas</h2>
+        <div class="section-header reveal">
+            <h2 class="section-title">Habilidades técnicas</h2>
+            <p class="section-desc">Herramientas que uso para extraer, modelar y comunicar datos.</p>
+        </div>
         <div class="skills-grid">
-            <div class="skill-card">
-                <div class="skill-icon"><i class="fas fa-chart-bar"></i></div>
-                <h3>R</h3>
-                <div class="skill-bar">
-                    <div class="fill" style="width: 90%;"></div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>R</h3>
                 </div>
-                <p>Nivel: Alto</p>
+                <span class="skill-level">Avanzado</span>
             </div>
-            <div class="skill-card">
-                <div class="skill-icon"><i class="fas fa-database"></i></div>
-                <h3>SQL</h3>
-                <div class="skill-bar">
-                    <div class="fill" style="width: 60%;"></div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3>Power BI</h3>
                 </div>
-                <p>Nivel: Intermedio</p>
+                <span class="skill-level">Cuadros de mando</span>
             </div>
-            <div class="skill-card">
-                <div class="skill-icon"><i class="fas fa-chart-pie"></i></div>
-                <h3>Power BI</h3>
-                <div class="skill-bar">
-                    <div class="fill" style="width: 40%;"></div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-database"></i></div>
+                    <h3>SQL</h3>
                 </div>
-                <p>Nivel: Básico</p>
+                <span class="skill-level">ETL y modelado</span>
             </div>
-            <div class="skill-card">
-                <div class="skill-icon"><i class="fas fa-table"></i></div>
-                <h3>Excel</h3>
-                <div class="skill-bar">
-                    <div class="fill" style="width: 50%;"></div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-table"></i></div>
+                    <h3>Excel</h3>
                 </div>
-                <p>Nivel: Intermedio</p>
+                <span class="skill-level">DAX y Power Query</span>
             </div>
-            <div class="skill-card">
-                <div class="skill-icon"><i class="fab fa-python"></i></div>
-                <h3>Python</h3>
-                <div class="skill-bar">
-                    <div class="fill" style="width: 20%;"></div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fab fa-python"></i></div>
+                    <h3>Python</h3>
                 </div>
-                <p>Nivel: Muy Básico</p>
+                <span class="skill-level">Pandas</span>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Automatización</h3>
+                </div>
+                <span class="skill-level">n8n, scraping, LLMs</span>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fas fa-comment-dots"></i></div>
+                    <h3>NLP</h3>
+                </div>
+                <span class="skill-level">Text mining y LDA</span>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-top">
+                    <div class="skill-icon"><i class="fab fa-git-alt"></i></div>
+                    <h3>Git</h3>
+                </div>
+                <span class="skill-level">Control de versiones</span>
             </div>
         </div>
     </section>
 
     <section id="sobre-mi" class="section">
-        <h2 class="section-title"><i class="fas fa-user-astronaut"></i> Sobre Mí</h2>
-        <div class="about-content">
-            <div class="bio-text">
-                <p>Estudiante de 4.º curso del Grado en Inteligencia y Analítica de Negocios (BIA), con dominio de
-                    <strong>R, SQL y Power BI</strong>.
-                </p>
-                <p>Busco mi primera experiencia profesional para aplicar conocimientos en modelado estadístico,
-                    visualización y apoyo a la toma de decisiones basadas en datos.</p>
-                <p>Interesado en <strong>optimización de procesos y Machine Learning</strong>.</p>
+        <div class="section-header reveal">
+            <h2 class="section-title">Sobre mí</h2>
+        </div>
+        <div class="about-grid">
+            <div class="bio-text reveal">
+                <p>Graduado en <strong>Business Intelligence &amp; Analytics</strong> por la Universitat de València,
+                    con foco en análisis cuantitativo, modelización de datos y finanzas.</p>
+                <p>Trabajo con <strong>SQL, R, Python y Power BI</strong> en proyectos integrales: desde la extracción,
+                    limpieza y análisis exploratorio, hasta el diseño de modelos estadísticos de clasificación y
+                    cuadros de mando interactivos.</p>
+                <p>Me interesa especialmente el punto de encuentro entre la <strong>ciencia de datos, el riesgo
+                        financiero y la estrategia empresarial</strong>. Disfruto aplicando técnicas cuantitativas para
+                    anticipar escenarios, detectar patrones de comportamiento y transformar datos dispersos en procesos
+                    más eficientes y decisiones de impacto real.</p>
+                <p>Abierto a oportunidades como <strong>Junior Data Analyst / Financial &amp; Risk Analyst</strong>
+                    donde aportar criterio analítico y resolver retos reales de negocio.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="CV_Carles_Villar.pdf" class="cta-btn" target="_blank" download>
+                        <i class="fas fa-download"></i> Descargar currículum
+                    </a>
+                </div>
             </div>
-            <div style="margin-top: 2rem;">
-                <a href="Currículum Carles Villar (3).pdf" class="cta-btn" target="_blank" download>
-                    <i class="fas fa-download"></i> Descargar Currículum
-                </a>
+            <div class="about-facts reveal">
+                <div class="about-fact">
+                    <span class="label">Formación</span>
+                    <span class="value">Grado en BI &amp; Analytics, Universitat de València</span>
+                </div>
+                <div class="about-fact">
+                    <span class="label">Enfoque</span>
+                    <span class="value">ETL, visualización y análisis</span>
+                </div>
+                <div class="about-fact">
+                    <span class="label">Idiomas</span>
+                    <span class="value">Castellano y valenciano nativos, inglés B1</span>
+                </div>
+                <div class="about-fact">
+                    <span class="label">Ubicación</span>
+                    <span class="value">Valencia, España</span>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="contacto" class="section">
-        <h2 class="section-title"><i class="fas fa-paper-plane"></i> Contacto</h2>
-        <div style="text-align: center;">
-            <a href="mailto:carlesvillar13@gmail.com"
-                style="color: #fff; text-decoration: none; font-size: 1.5rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px;">carlesvillar13@gmail.com</a>
+        <div class="section-header reveal">
+            <h2 class="section-title">Contacto</h2>
+        </div>
+        <div class="contact-block reveal">
+            <a href="mailto:carlesvillar13@gmail.com" class="contact-email">carlesvillar13@gmail.com</a>
+            <p class="contact-sub">Escríbeme y te respondo. También me encontrarás en <a
+                    href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>.</p>
         </div>
     </section>
 

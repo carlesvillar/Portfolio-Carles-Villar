@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentimiento en foros cripto | Carles Villar</title>
+    <meta name="description" content="Comparación de dos métodos de análisis de sentimiento sobre comentarios de r/CryptoCurrency: sentimentr frente al léxico financiero Loughran-McDonald.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#proyectos">Proyectos</a></li>
+            <li><a href="../index.html#habilidades">Habilidades</a></li>
+            <li><a href="../index.html#sobre-mi">Sobre mí</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="case-wrap">
+        <header class="case-hero">
+            <a href="../index.html#proyectos" class="back-link"><i class="fas fa-arrow-left"></i> Todos los proyectos</a>
+            <span class="case-kicker">NLP · Análisis de sentimiento</span>
+            <h1>¿Qué siente realmente un foro cripto?</h1>
+            <p class="case-lead">Dos métodos de análisis de sentimiento sobre el mismo corpus de Reddit dieron
+                respuestas opuestas. Entender por qué discrepaban resultó más informativo que cualquiera de los dos
+                resultados por separado.</p>
+
+            <div class="case-meta">
+                <div>
+                    <span class="label">Herramientas</span>
+                    <span class="value">R, RedditExtractoR, sentimentr, tidytext</span>
+                </div>
+                <div>
+                    <span class="label">Corpus</span>
+                    <span class="value">Daily Discussion de r/CryptoCurrency</span>
+                </div>
+                <div>
+                    <span class="label">Enfoque</span>
+                    <span class="value">Comparación de léxico contextual y de dominio</span>
+                </div>
+                <div>
+                    <span class="label">Tipo</span>
+                    <span class="value">Proyecto académico</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="case-body">
+            <section class="case-section">
+                <h2>El problema</h2>
+                <p>El mercado cripto no descansa: opera 24 horas y el ánimo colectivo puede pasar de la euforia al
+                    miedo en cuestión de minutos. La pregunta era cómo medir ese ruido de forma rigurosa.</p>
+                <p>Pero el objetivo real no era solo describir el sentimiento del foro, sino <strong>evaluar qué técnica
+                    mide mejor el pulso emocional de un mercado</strong> cuando el material de partida está lleno de
+                    jerga, ironía y lenguaje informal.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los datos</h2>
+                <p>Extraje los comentarios del hilo de discusión diaria de r/CryptoCurrency a través de la API de
+                    Reddit con la librería RedditExtractoR. La API devuelve los niveles superiores y las respuestas
+                    principales, lo que resultó ser una ventaja: un corpus manejable con los comentarios de más peso y
+                    menos ruido periférico.</p>
+                <p>El preprocesado incluyó tres controles previos a cualquier cálculo de polaridad:</p>
+                <ul>
+                    <li><strong>Comprobación de emojis.</strong> En foros cripto los símbolos como el cohete o el
+                        gráfico bajista cargan mucho significado. Verifiqué su presencia antes de limpiar, para no
+                        destruir información emocional sin darme cuenta. En este hilo no aparecían.</li>
+                    <li><strong>Deduplicación.</strong> Un usuario o bot repitiendo el mismo comentario sesga la
+                        distribución hacia su polaridad. Eliminarlos garantiza que medimos diversidad de opiniones y no
+                        volumen de repetición.</li>
+                    <li><strong>Normalización.</strong> Transliteración a ASCII, eliminación de caracteres de control y
+                        espacios sobrantes.</li>
+                </ul>
+            </section>
+
+            <section class="case-section">
+                <h2>El método</h2>
+                <p>Comparé dos enfoques deliberadamente distintos.</p>
+
+                <h3>sentimentr: leer el contexto</h3>
+                <p>A diferencia de un diccionario estático que suma puntos por palabra, sentimentr detecta
+                    <strong>modificadores de valencia</strong>: negadores, intensificadores y atenuadores que alteran
+                    el sentido de la frase completa. Ante «esta caída no es realmente mala», un diccionario simple ve
+                    «caída» y «mala» y puntúa muy negativo; sentimentr detecta el intensificador, luego el negador, y
+                    acaba dejando la frase en neutro.</p>
+
+                <h3>Loughran-McDonald: hablar el idioma del dinero</h3>
+                <p>Es un léxico creado para leer informes financieros. Ignora deliberadamente palabras con carga
+                    emocional ambigua en contexto económico y no clasifica términos técnicos como «coste» o «pasivo»
+                    como negativos por defecto. A cambio, añade dimensiones que un análisis de polaridad simple no
+                    tiene: <strong>incertidumbre</strong> y <strong>litigiosidad</strong>.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los hallazgos</h2>
+
+                <div class="stat-row">
+                    <div class="stat">
+                        <span class="num">34,3 / 33,4 / 32,3</span>
+                        <span class="cap">Reparto negativo, positivo y neutral según sentimentr, en porcentaje</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">Incertidumbre</span>
+                        <span class="cap">Segunda dimensión más frecuente según Loughran</span>
+                    </div>
+                </div>
+
+                <p>sentimentr devolvió una distribución <strong>casi perfectamente simétrica</strong>. Interpretado
+                    solo, sugiere una comunidad polarizada donde el pánico y el optimismo se contrarrestan y el
+                    resultado neto es la ambigüedad.</p>
+                <p>Loughran dio un resultado categóricamente distinto: <strong>la negatividad domina con claridad</strong>,
+                    y la incertidumbre emerge como segunda dimensión. Las palabras que la impulsan son concretas:
+                    «loss», «risk», «doubt».</p>
+
+                <div class="callout">
+                    <p>La discrepancia no era un error, sino el hallazgo. sentimentr midió la emoción del momento;
+                        Loughran cuantificó la aversión al riesgo financiero. Detrás de una fachada de sarcasmo y
+                        optimismo volátil hay un fondo sólido de cautela.</p>
+                </div>
+
+                <p>Esa lectura conjunta es la conclusión del trabajo: el sentimiento real del foro es de
+                    <strong>profunda cautela dominada por la incertidumbre</strong>, disimulada por el ruido social del
+                    hilo. Ninguno de los dos métodos habría llegado ahí por su cuenta.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Dónde fallan los modelos</h2>
+                <p>La parte más útil del análisis fue auditar manualmente los comentarios extremos y los clasificados
+                    como neutros. Ahí es donde se ve el límite real de los léxicos.</p>
+                <p>sentimentr corrigió bien las negaciones, pero <strong>su lógica contextual se rompe ante el sarcasmo
+                    extremo</strong>. Preguntas retóricas como «Guys, this is healthy right? Right?» acabaron entre los
+                    diez comentarios más positivos. Y expresiones de resignación exagerada del tipo «Giga mega hyper
+                    titanic cooked» o «100k gone soon» se clasificaron como neutras, cuando significan justo lo
+                    contrario. El algoritmo mete en el mismo saco a un usuario tranquilo y a uno en pánico.</p>
+                <p>La segunda limitación es de escala: el corpus es una fotografía de un solo día, lo que impide
+                    extraer conclusiones sobre tendencias.</p>
+                <p>Para continuarlo haría dos cosas: anotar manualmente un subconjunto para atacar el problema del
+                    sarcasmo, y ampliar el corpus a una serie temporal para poder <strong>correlacionar sentimiento con
+                    movimientos de precio</strong> y comprobar si el sentimiento anticipa el mercado o simplemente
+                    reacciona a él.</p>
+            </section>
+
+            <div class="report-cta">
+                <h2>Informe técnico completo</h2>
+                <p>Documento con el código en R, las tablas de auditoría de comentarios y los gráficos de distribución
+                    de ambos métodos.</p>
+                <a href="../TAREA%203.html" class="cta-btn" target="_blank">
+                    Ver informe completo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <nav class="case-footer-nav">
+            <a href="spaceship-titanic.html" class="prev">
+                <span class="dir">Proyecto anterior</span>
+                <span class="name">Spaceship Titanic</span>
+            </a>
+            <a href="horizonte-finanzas.html" class="next">
+                <span class="dir">Proyecto siguiente</span>
+                <span class="name">Un puente digital hacia la inversión</span>
+            </a>
+        </nav>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Carles Villar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

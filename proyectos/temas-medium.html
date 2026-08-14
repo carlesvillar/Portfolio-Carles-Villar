@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis temático de Medium | Carles Villar</title>
+    <meta name="description" content="Modelado de tópicos con LDA sobre 6.500 artículos de Medium. Cuando las métricas de coherencia y la lectura cualitativa no coinciden.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#proyectos">Proyectos</a></li>
+            <li><a href="../index.html#habilidades">Habilidades</a></li>
+            <li><a href="../index.html#sobre-mi">Sobre mí</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="case-wrap">
+        <header class="case-hero">
+            <a href="../index.html#proyectos" class="back-link"><i class="fas fa-arrow-left"></i> Todos los proyectos</a>
+            <span class="case-kicker">NLP · Modelado de tópicos</span>
+            <h1>Cuando la métrica y la lectura no coinciden</h1>
+            <p class="case-lead">Las métricas de coherencia decían que el número óptimo de tópicos era cuatro. Leer los
+                artículos demostró que eran siete. Un caso práctico sobre por qué no basta con optimizar un número.</p>
+
+            <div class="case-meta">
+                <div>
+                    <span class="label">Herramientas</span>
+                    <span class="value">R, tidytext, topicmodels, seededlda</span>
+                </div>
+                <div>
+                    <span class="label">Técnicas</span>
+                    <span class="value">LDA con Gibbs sampling, LDA semi-supervisado</span>
+                </div>
+                <div>
+                    <span class="label">Corpus</span>
+                    <span class="value">Unos 6.500 artículos de Medium</span>
+                </div>
+                <div>
+                    <span class="label">Tipo</span>
+                    <span class="value">Proyecto académico</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="case-body">
+            <section class="case-section">
+                <h2>El problema</h2>
+                <p>Medium funciona como termómetro de las tendencias en tecnología, diseño y emprendimiento, pero su
+                    contenido es deliberadamente híbrido: tutoriales técnicos, opinión profesional y reflexión personal
+                    conviven en la misma plataforma. La pregunta era si un algoritmo no supervisado como LDA sería
+                    capaz de desenredar esa mezcla.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los datos</h2>
+                <p>Partí de un conjunto de unos 6.500 artículos extraídos de las publicaciones más conocidas de la
+                    plataforma. Tomé una decisión de diseño que condicionó todo lo demás: <strong>combinar título y
+                    subtítulo como unidad de documento</strong>, en lugar de usar el cuerpo completo. En Medium el
+                    contenido es muy denso y el tema está concentrado en esas dos frases; el texto entero habría
+                    añadido mucho más ruido que señal.</p>
+                <p>Al inspeccionar las primeras filas detecté un problema específico de este conjunto: restos de código
+                    HTML pegados al texto, con etiquetas como «classmarkupstrong». Sin eliminarlos, el modelo habría
+                    interpretado que eran palabras clave importantísimas por su altísima frecuencia. Los quité con
+                    expresiones regulares antes de la limpieza estándar.</p>
+                <p>El vocabulario resultante ya revelaba la naturaleza híbrida del corpus: predominio de términos
+                    técnicos (data, machine, python) y de diseño (design, ux), pero con una presencia alta de writing,
+                    life y time.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>El método</h2>
+                <p>Usé <strong>muestreo de Gibbs</strong> en lugar de la aproximación variacional. Es
+                    computacionalmente más costoso, pero en corpus de tamaño medio con texto natural tiende a producir
+                    tópicos más estables e interpretables, evitando óptimos locales.</p>
+                <p>Para elegir el número de tópicos, las métricas de densidad y coherencia (minimizar CaoJuan2009,
+                    maximizar Deveaud2014) apuntaban a <strong>k=4</strong>. Probé también k=6.</p>
+                <p>El paso decisivo fue no quedarme en la matriz beta, que solo dice qué palabras pesan en cada tópico.
+                    Las palabras sueltas son ambiguas fuera de contexto: «model» puede ser una pasarela de moda o un
+                    modelo estadístico. Pasé a la <strong>matriz gamma</strong> para leer los títulos reales de los
+                    artículos más representativos de cada grupo.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los hallazgos</h2>
+
+                <h3>Las métricas se quedaban cortas</h3>
+                <p>Con k=4 el modelo mezclaba diseño con inteligencia artificial en un mismo tópico: para el algoritmo
+                    ambos son «lo técnico» y, sin categorías suficientes, los fusionaba. Con k=6 esa separación se
+                    resolvió limpiamente, pero apareció otro solapamiento: anécdotas personales conviviendo con
+                    contenido de marketing.</p>
+                <p>Al subir a <strong>k=7</strong> emergió un tópico que estaba oculto, definido por writing, life,
+                    people y day. Los artículos más representativos no dejaban lugar a dudas: «write to start the day»,
+                    «how not to write». Recogía la escritura y la reflexión personal, que antes se forzaban a convivir
+                    con el contenido de negocio.</p>
+
+                <div class="callout">
+                    <p>Las métricas cuantitativas apuntaban a k=4 o k=6. El análisis cualitativo demostró que k=7 era
+                        la mejor opción. Optimizar la métrica y representar bien el corpus no siempre son lo mismo.</p>
+                </div>
+
+                <p>Después refiné con <strong>Seeded LDA</strong>, un enfoque semi-supervisado: definir un diccionario
+                    de palabras clave por tema ya validado y dejar que el algoritmo agrupe alrededor de definiciones
+                    más estrictas. El resultado son siete categorías limpias, desde AI & Deep Learning hasta Writing &
+                    Life.</p>
+
+                <h3>Lo humano gana a lo técnico</h3>
+                <div class="stat-row">
+                    <div class="stat">
+                        <span class="num">+1.000</span>
+                        <span class="cap">Artículos en Writing &amp; Life, la categoría más numerosa</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">14-15%</span>
+                        <span class="cap">Probabilidad base de cualquier tema en cualquier editorial</span>
+                    </div>
+                </div>
+
+                <p>El corpus no es puramente técnico. Writing & Life supera a todas las categorías tecnológicas, lo que
+                    dice bastante sobre qué le interesa realmente a esta comunidad. Dentro de lo técnico, la
+                    inteligencia artificial domina con claridad sobre desarrollo web o diseño.</p>
+
+                <h3>El hallazgo que no esperaba</h3>
+                <p>Esperaba encontrar silos editoriales: publicaciones técnicas hablando solo de código, publicaciones
+                    de negocio solo de mercado. Lo que encontré fue <strong>una homogeneidad sorprendente</strong>,
+                    con probabilidades estables entre el 14% y el 15% para casi cualquier combinación.</p>
+                <p>Las identidades existen pero son matices sobre esa base común: UX Collective muestra fidelidad clara
+                    al diseño, Towards Data Science valida su perfil técnico, y gigantes como The Startup presentan
+                    distribuciones prácticamente planas que confirman su papel de contenedor editorial transversal.</p>
+                <p>Hay dos explicaciones y ambas importan. La primera es de contenido: los artículos son narrativas
+                    híbridas, y un tutorial de Python rara vez es solo código. La segunda es matemática: LDA trabaja
+                    con probabilidades y casi nunca asigna un 0% estricto, lo que genera esa base uniforme.</p>
+
+                <h3>Impacto sobre la audiencia</h3>
+                <p>Al cruzar los tópicos con los aplausos recibidos, las medianas resultaron muy alineadas en torno a
+                    100-150. El rendimiento base es parecido escribas de lo que escribas. Writing & Life tiene la
+                    mediana más alta, confirmándose como la apuesta más segura, mientras que lo puramente técnico parte
+                    de un suelo más bajo por tener un público más reducido y específico. Pero <strong>no existe techo
+                    para lo técnico</strong>: todos los tópicos, sin excepción, tienen artículos que superan los 10.000
+                    aplausos.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Limitaciones</h2>
+                <p>La homogeneidad editorial encontrada me deja una duda honesta que dejo planteada en el informe: no
+                    puedo descartar del todo que refleje una limitación del propio modelo para distribuir los temas
+                    entre editoriales, en lugar de una característica real de la plataforma.</p>
+                <p>Usar solo título y subtítulo fue una decisión deliberada, pero acota lo que el modelo puede ver. Un
+                    análisis del cuerpo completo, con más capacidad de cómputo, permitiría contrastar si la estructura
+                    temática se mantiene.</p>
+            </section>
+
+            <div class="report-cta">
+                <h2>Informe técnico completo</h2>
+                <p>Documento con el preprocesado, la comparación de modelos para cada valor de k, las matrices beta y
+                    gamma y el análisis de impacto.</p>
+                <a href="../TAREA_4.html" class="cta-btn" target="_blank">
+                    Ver informe completo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <nav class="case-footer-nav">
+            <a href="scraping-inversion.html" class="prev">
+                <span class="dir">Proyecto anterior</span>
+                <span class="name">Extracción de datos para inversión</span>
+            </a>
+            <a href="spaceship-titanic.html" class="next">
+                <span class="dir">Proyecto siguiente</span>
+                <span class="name">Spaceship Titanic</span>
+            </a>
+        </nav>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Carles Villar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

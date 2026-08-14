@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un puente digital hacia la inversión | Carles Villar</title>
+    <meta name="description" content="Análisis NLP de 4.229 comentarios de Reddit para identificar las preocupaciones financieras reales de los jóvenes españoles y fundamentar el diseño de una app.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#proyectos">Proyectos</a></li>
+            <li><a href="../index.html#habilidades">Habilidades</a></li>
+            <li><a href="../index.html#sobre-mi">Sobre mí</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="case-wrap">
+        <header class="case-hero">
+            <a href="../index.html#proyectos" class="back-link"><i class="fas fa-arrow-left"></i> Todos los proyectos</a>
+            <span class="case-kicker">NLP · Investigación de producto</span>
+            <h1>Un puente digital hacia la inversión</h1>
+            <p class="case-lead">Analicé 4.229 comentarios de Reddit para averiguar qué preocupa financieramente a los
+                jóvenes españoles, y usar esa evidencia para decidir qué debería hacer una app en lugar de guiarme por
+                intuición.</p>
+
+            <div class="case-meta">
+                <div>
+                    <span class="label">Herramientas</span>
+                    <span class="value">R, syuzhet, topicmodels, API de Reddit</span>
+                </div>
+                <div>
+                    <span class="label">Técnicas</span>
+                    <span class="value">LDA, léxico NRC, análisis de bigramas</span>
+                </div>
+                <div>
+                    <span class="label">Corpus</span>
+                    <span class="value">4.229 comentarios</span>
+                </div>
+                <div>
+                    <span class="label">Tipo</span>
+                    <span class="value">Base empírica de mi TFG</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="case-body">
+            <section class="case-section">
+                <h2>El problema</h2>
+                <p>Según la Encuesta de Competencias Financieras del Banco de España analizada por Funcas, apenas el
+                    19% de los españoles responde correctamente a las tres preguntas básicas sobre interés compuesto,
+                    inflación y diversificación del riesgo. Y según El Economista, un 62% de los jóvenes que no
+                    invierten señalan que es porque no saben cómo hacerlo.</p>
+                <p>Ese vacío tiene una consecuencia: la desconfianza hacia el asesoramiento tradicional, percibido como
+                    caro y elitista, ha abierto la puerta a los <em>finfluencers</em>, perfiles que prometen
+                    rentabilidades irreales sin ninguna garantía técnica.</p>
+                <p>Este trabajo es la base empírica de mi Trabajo de Fin de Grado, el desarrollo de una herramienta
+                    llamada Horizonte. La pregunta que guía el análisis es concreta: <strong>¿qué funcionalidades
+                    responden a problemas que la gente expresa de verdad, y no a los que yo supongo que tiene?</strong>
+                </p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los datos</h2>
+                <p>Elegí Reddit sobre otras redes por dos razones. La primera es el pseudonimato: a diferencia de
+                    plataformas orientadas a proyectar una imagen, aquí la gente comparte frustraciones económicas sin
+                    el estigma social que acompaña al fracaso financiero, lo que produce testimonios más extensos y
+                    sinceros. La segunda es puramente práctica: mantiene una API accesible.</p>
+                <p>Para evitar sesgo de clase, extraje de comunidades con perfiles distintos: r/SpainFire (orientada a
+                    inversión), r/es (generalista) y r/askspain (consultas cotidianas), buscando hilos con términos
+                    como invertir, jubilación, pensión, ahorro o empleo.</p>
+                <p>El filtrado fue deliberadamente estricto: deduplicación por URL, eliminación de hilos con menos de
+                    diez comentarios para descartar contenido superficial, y limpieza del ruido sistémico de la
+                    plataforma. Conservé signos de exclamación e interrogación por su carga emocional. El corpus final
+                    quedó en <strong>4.229 comentarios</strong>.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>El método</h2>
+                <p>Combiné tres técnicas que operan a distinto nivel:</p>
+                <ul>
+                    <li><strong>Modelado de tópicos con LDA.</strong> La optimización del hiperparámetro señalaba k=5,
+                        pero al evaluar ambos comprobé que con cinco tópicos se fusionaban categorías distintas. Me
+                        quedé con <strong>k=6</strong>, que aisla correctamente las dimensiones.</li>
+                    <li><strong>Léxico NRC en castellano.</strong> Frente a modelos binarios de polaridad, NRC extrae
+                        ocho emociones (ira, anticipación, asco, miedo, alegría, tristeza, sorpresa y confianza). Es
+                        clave para saber no solo si hay descontento, sino de qué tipo.</li>
+                    <li><strong>Análisis de bigramas.</strong> Para aterrizar preocupaciones abstractas en conceptos
+                        operativos concretos.</li>
+                </ul>
+                <p>El problema técnico principal fue de trazabilidad: la estructura jerárquica de Reddit generaba
+                    conflictos de sincronización de identificadores al pasar entre representaciones, produciendo nulos
+                    que impedían cruzar sentimiento y tópico. Lo resolví con una reindexación plana y secuencial tras
+                    la limpieza, garantizando correspondencia uno a uno.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los hallazgos</h2>
+                <p>Las seis dimensiones detectadas dibujan un mapa reconocible: inflación y consumo cotidiano, gestión
+                    de gastos, mercado inmobiliario, planificación de futuro, contexto político-fiscal, y financiación
+                    e hipotecas.</p>
+
+                <div class="stat-row">
+                    <div class="stat">
+                        <span class="num">1,1</span>
+                        <span class="cap">Sentimiento medio del tópico de planificación, el más alto del corpus</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">0,35</span>
+                        <span class="cap">Sentimiento medio del tópico político-fiscal, el más bajo</span>
+                    </div>
+                </div>
+
+                <p>El contraste más revelador está entre esos dos extremos. El tópico de <strong>planificación</strong>
+                    (con términos como pensión, FIRE, dinero) es el único que no se centra en la queja sino en la
+                    estrategia, y registra el sentimiento más alto junto a una intensidad muy marcada en confianza y
+                    anticipación. En el extremo opuesto, el tópico <strong>político-fiscal</strong> confirma una
+                    desafección clara: el marco fiscal se percibe como obstáculo, no como apoyo.</p>
+                <p>Los tópicos de consumo y vivienda concentran <strong>tristeza y miedo</strong>. No es circunstancial:
+                    responde a una sensación de vulnerabilidad ante el encarecimiento de lo básico, donde el miedo
+                    actúa como emoción paralizante que bloquea cualquier planificación a largo plazo.</p>
+
+                <div class="callout">
+                    <p>Los bigramas separan dos lenguajes dentro del mismo corpus. Uno de supervivencia: «marca
+                        blanca», «viviendas vacías», «pisos turísticos». Otro de estrategia: «msci world», «fondos
+                        indexados», «intereses compuestos», «independencia financiera».</p>
+                </div>
+
+                <p>Esa división es el hallazgo que sostiene el diseño del producto. Existe un perfil que ya ha
+                    encontrado herramientas para defenderse y otro atrapado en la gestión del día a día. La distancia
+                    entre ambos no es de renta, sino de <strong>acceso al conocimiento</strong>.</p>
+
+                <h3>De los datos a las funcionalidades</h3>
+                <p>Cada hallazgo se traduce en una decisión de producto concreta: traducir el ahorro cotidiano en
+                    capacidad de inversión visible, un planificador de metas que proyecte probabilidades de alcanzar un
+                    objetivo, un módulo de fiscalidad que devuelva sensación de control, y un simulador de escenarios
+                    de crisis con datos históricos de inflación. El objetivo declarado es transformar la tristeza
+                    detectada en anticipación.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Limitaciones</h2>
+                <p>La más importante es el <strong>sesgo de autoselección</strong>. Quien comenta en estos foros tiene
+                    una alfabetización financiera superior a la media, lo que sugiere que el malestar en la población
+                    general podría ser incluso más profundo que el que capta la muestra.</p>
+                <p>El léxico NRC tampoco capta el sarcasmo y clasifica términos como «banco» o «dinero» bajo confianza
+                    aunque el contexto sea de rechazo, lo que infla artificialmente esa emoción en todos los tópicos.
+                    Es una lectura que hay que corregir manualmente.</p>
+                <p>Y LDA simplifica: asume una asignación temática dominante cuando las preocupaciones reales son
+                    transversales. La inflación influye directamente en la capacidad de pagar un alquiler.</p>
+                <p>La continuación natural sería cruzar el sentimiento con indicadores macroeconómicos reales, para
+                    dar validez estadística a la relación entre el miedo detectado y la evolución efectiva de los
+                    precios.</p>
+            </section>
+
+            <div class="report-cta">
+                <h2>Informe completo</h2>
+                <p>Documento de investigación con el marco teórico, la metodología detallada, los gráficos de
+                    resultados y el código de reproducción.</p>
+                <a href="../Un%20puente%20digital%20hacia%20la%20inversi%C3%B3n_%20Democratizando%20las%20finanzas%20avanzadas%20frente%20a%20la%20crisis%20de%20coste%20de%20vida%20(1).pdf"
+                    class="cta-btn" target="_blank">
+                    Ver documento en PDF <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <nav class="case-footer-nav">
+            <a href="sentimiento-cripto.html" class="prev">
+                <span class="dir">Proyecto anterior</span>
+                <span class="name">Sentimiento en foros cripto</span>
+            </a>
+            <a href="scraping-inversion.html" class="next">
+                <span class="dir">Proyecto siguiente</span>
+                <span class="name">Extracción de datos para inversión</span>
+            </a>
+        </nav>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Carles Villar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

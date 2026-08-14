@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extracción de datos para inversión | Carles Villar</title>
+    <meta name="description" content="Pipeline de scraping estático y dinámico con R, n8n y Firecrawl para cruzar variación de precio con sentimiento de noticias financieras.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#proyectos">Proyectos</a></li>
+            <li><a href="../index.html#habilidades">Habilidades</a></li>
+            <li><a href="../index.html#sobre-mi">Sobre mí</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="case-wrap">
+        <header class="case-hero">
+            <a href="../index.html#proyectos" class="back-link"><i class="fas fa-arrow-left"></i> Todos los proyectos</a>
+            <span class="case-kicker">Web scraping · Automatización</span>
+            <h1>Cruzar precio y noticias para priorizar oportunidades</h1>
+            <p class="case-lead">Un pipeline que combina scraping estático en R con un flujo automatizado en n8n, para
+                distinguir qué movimientos de mercado están respaldados por noticias y cuáles parecen especulativos.</p>
+
+            <div class="case-meta">
+                <div>
+                    <span class="label">Herramientas</span>
+                    <span class="value">R, XPath, n8n, Firecrawl, Gemini, Google Sheets</span>
+                </div>
+                <div>
+                    <span class="label">Técnicas</span>
+                    <span class="value">Scraping estático y dinámico, análisis de sentimiento</span>
+                </div>
+                <div>
+                    <span class="label">Fuentes</span>
+                    <span class="value">Feed RSS de Yahoo Finance y cotizaciones en vivo</span>
+                </div>
+                <div>
+                    <span class="label">Tipo</span>
+                    <span class="value">Proyecto académico</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="case-body">
+            <section class="case-section">
+                <h2>El problema</h2>
+                <p>Una variación fuerte de precio, por sí sola, no dice gran cosa. Puede responder a una noticia
+                    concreta o puede ser puro movimiento especulativo, y la diferencia importa mucho a la hora de
+                    decidir. La idea del proyecto era construir un flujo que juntase las dos caras: <strong>el dato
+                    cuantitativo de la variación y el contexto cualitativo de las noticias</strong>.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los datos</h2>
+                <p>La primera dificultad fue encontrar una fuente viable. Yahoo Finance en su versión web bloquea las
+                    solicitudes automatizadas cuando detecta un bot, y otras páginas generan el contenido con
+                    JavaScript, lo que hace imposible la extracción estática.</p>
+                <p>La solución fue usar el <strong>feed RSS de Yahoo Finance</strong>, que entrega las noticias en XML
+                    abierto y estructurado. Al estar organizado en etiquetas jerárquicas, con cada noticia en un nodo
+                    y sus subelementos de título, enlace y fecha, se recorre limpiamente con XPath.</p>
+                <p>Para las cotizaciones monté una segunda vía con scraping dinámico sobre tres fuentes: valores de
+                    criptomonedas, acciones ganadoras y acciones con mayores pérdidas.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>El método</h2>
+                <h3>Parte A: scraping estático en R</h3>
+                <p>Extracción directa del XML con XPath, recuperando titulares, fechas y enlaces de las noticias
+                    económicas.</p>
+
+                <h3>Parte B: flujo automatizado en n8n</h3>
+                <p>El flujo encadena varios nodos: un disparador (sustituible por uno programado cada 24 horas si se
+                    quisiera usar en producción), tres nodos de configuración con las URLs de cada fuente, y un nodo
+                    Firecrawl que ejecuta el scraping.</p>
+                <p>Ahí apareció el problema más interesante de resolver. Los formatos HTML y JSON generaban errores en
+                    el procesamiento posterior. La solución fue <strong>extraer en Markdown</strong>: un formato lo
+                    bastante legible y estructurado para que el siguiente nodo de IA interpretase la información
+                    correctamente.</p>
+                <p>Un nodo Information Extractor conectado a Gemini filtra el contenido irrelevante de la página y
+                    devuelve JSON estructurado, con un elemento por activo financiero. Después, un nodo de división
+                    convierte el array en registros individuales para volcarlos ordenadamente en Google Sheets, cada
+                    registro en su fila y cada campo en su columna.</p>
+                <p>La segunda mitad del flujo une las tres hojas, filtra mediante código JavaScript los diez activos
+                    con mayor variación, y pasa ese resultado a Gemini para que proponga explicaciones de por qué se
+                    han movido tanto.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los hallazgos</h2>
+                <p>La pieza analítica es una función que relaciona las oportunidades detectadas con el sentimiento de
+                    los titulares, asignando a cada activo un <strong>score que combina magnitud de la variación,
+                    sentimiento medio de las noticias de su sector y volumen de cobertura</strong>.</p>
+                <p>La tabla resultante permite leer dos situaciones distintas de un vistazo:</p>
+                <ul>
+                    <li><strong>Movimiento respaldado.</strong> Un activo que sube con fuerza y además acumula noticias
+                        positivas en su sector. La subida es coherente con el contexto informativo.</li>
+                    <li><strong>Divergencia.</strong> Un activo cuyo precio cae mientras el sentimiento de su sector es
+                        positivo. La discrepancia es en sí misma la señal que merece atención.</li>
+                </ul>
+
+                <div class="callout">
+                    <p>Un score alto indica que el activo se mueve en la dirección que respaldan las noticias. Un score
+                        bajo puede señalar movimientos sin fundamento informativo.</p>
+                </div>
+            </section>
+
+            <section class="case-section">
+                <h2>Limitaciones</h2>
+                <p>El sistema funciona, pero tiene margen de mejora claro y prefiero dejarlo dicho:</p>
+                <ul>
+                    <li>La <strong>asignación de sectores es manual</strong>, algo que debería resolverse con métodos
+                        de clasificación automática.</li>
+                    <li>La relación entre noticias y activos se apoya en sectores y palabras clave. Un análisis más
+                        fino identificaría menciones directas de cada compañía en los titulares.</li>
+                    <li>El abanico de noticias y de activos analizados es reducido, limitado por capacidad de cómputo
+                        y tiempo.</li>
+                </ul>
+                <p>Es un proyecto que sienta las bases más que cerrar el problema: la arquitectura permite ampliar cada
+                    una de esas piezas sin rehacer el flujo.</p>
+            </section>
+
+            <div class="report-cta">
+                <h2>Informe técnico completo</h2>
+                <p>Documento con el código en R, las capturas del flujo de n8n y la tabla de resultados con los scores
+                    por sector.</p>
+                <a href="../TAREA_2_CARLES_VILLAR.html" class="cta-btn" target="_blank">
+                    Ver informe completo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <nav class="case-footer-nav">
+            <a href="horizonte-finanzas.html" class="prev">
+                <span class="dir">Proyecto anterior</span>
+                <span class="name">Un puente digital hacia la inversión</span>
+            </a>
+            <a href="temas-medium.html" class="next">
+                <span class="dir">Proyecto siguiente</span>
+                <span class="name">Análisis temático de Medium</span>
+            </a>
+        </nav>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Carles Villar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Titanic | Carles Villar</title>
+    <meta name="description" content="Modelo de clasificación para la competición Kaggle Spaceship Titanic. Accuracy 0,81014 y un diagnóstico del techo de información del problema.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">CV<span class="accent-dot">.</span></a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#proyectos">Proyectos</a></li>
+            <li><a href="../index.html#habilidades">Habilidades</a></li>
+            <li><a href="../index.html#sobre-mi">Sobre mí</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="../index.html#contacto" class="cta-btn nav-cta">Contactar</a>
+            <a href="https://www.linkedin.com/in/carles-villar-vegara-a95228294/" class="nav-icon-btn" target="_blank"
+                rel="noopener noreferrer" aria-label="Perfil de LinkedIn de Carles Villar" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="case-wrap">
+        <header class="case-hero">
+            <a href="../index.html#proyectos" class="back-link"><i class="fas fa-arrow-left"></i> Todos los proyectos</a>
+            <span class="case-kicker">Machine learning · Competición Kaggle</span>
+            <h1>Spaceship Titanic</h1>
+            <p class="case-lead">Predecir qué pasajeros fueron transportados a otra dimensión. El resultado interesante
+                no fue el modelo, sino descubrir dónde estaba exactamente el límite de lo que los datos podían
+                predecir.</p>
+
+            <div class="case-meta">
+                <div>
+                    <span class="label">Herramientas</span>
+                    <span class="value">R, XGBoost, LightGBM, Random Forest</span>
+                </div>
+                <div>
+                    <span class="label">Técnicas</span>
+                    <span class="value">Imputación deductiva, ensemble, validación anidada</span>
+                </div>
+                <div>
+                    <span class="label">Resultado</span>
+                    <span class="value">0,81014 accuracy en test</span>
+                </div>
+                <div>
+                    <span class="label">Tipo</span>
+                    <span class="value">Proyecto académico</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="case-body">
+            <section class="case-section">
+                <h2>El problema</h2>
+                <p>La competición de Kaggle plantea una versión futurista del Titanic: una nave de pasajeros colisiona
+                    con una anomalía espaciotemporal y aproximadamente la mitad del pasaje es transportado a una
+                    dimensión paralela. El objetivo es construir un clasificador que prediga qué pasajeros fueron
+                    transportados.</p>
+                <p>Empecé con el objetivo habitual de subir en la clasificación. Acabé con una pregunta bastante más
+                    útil: <strong>¿cuánto de lo que estaba midiendo era mejora real y cuánto era ruido?</strong></p>
+            </section>
+
+            <section class="case-section">
+                <h2>Los datos</h2>
+                <p>El conjunto incluye datos demográficos, el planeta de origen, el camarote asignado y el gasto
+                    realizado en los distintos servicios de a bordo. El bloque financiero y varias variables
+                    categóricas presentaban una cantidad importante de valores faltantes.</p>
+                <p>En lugar de imputar directamente con la mediana, diseñé una <strong>estrategia de imputación guiada
+                    por reglas de negocio</strong>: muchos huecos se podían deducir lógicamente a partir de los grupos
+                    familiares, la cubierta del camarote y la edad, antes de recurrir a cualquier técnica estadística.
+                    Imputar por deducción primero evita meter ruido artificial en el modelo.</p>
+                <p>También extraje información de variables compuestas: el identificador de pasajero codifica el grupo
+                    de viaje, y el campo de camarote contiene cubierta, número y lado de la nave.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>El método</h2>
+                <p>El modelo final combina <strong>nueve modelos de cuatro familias distintas</strong>: tres XGBoost de
+                    profundidad creciente, tres LightGBM con distinta granularidad de hoja, dos Random Forest y una
+                    regresión logística regularizada. Todos entrenados sobre las mismas diez particiones agrupadas y
+                    con las semillas fijadas, de modo que los resultados son reproducibles y comparables entre sí.</p>
+                <p>La decisión más importante del trabajo no fue de modelado sino de medición. Al calcular el error de
+                    muestreo del accuracy comprobé que <strong>muchas de las comparaciones que había estado haciendo se
+                    apoyaban en diferencias más pequeñas que el propio ruido de la medición</strong>. Eso obligó a
+                    rehacer el protocolo:</p>
+                <ul>
+                    <li><strong>Validación anidada.</strong> Todo lo que se ajusta mirando la respuesta (el umbral de
+                        decisión, la selección de miembros del ensemble) pasó a estar dentro del bucle de validación.
+                        Fuera de él, la estimación queda sesgada al alza.</li>
+                    <li><strong>Contrastes pareados.</strong> Cada cambio se evaluó contra el anterior con su
+                        contraste, no comparando dos números sueltos.</li>
+                    <li><strong>Tests de permutación.</strong> Para verificar empíricamente que no había fugas de
+                        información, en lugar de confiar en la lectura del código.</li>
+                    <li><strong>Regla de un error típico.</strong> Entre las opciones estadísticamente indistinguibles,
+                        elegir la de menor riesgo en lugar de la de mayor puntuación.</li>
+                </ul>
+            </section>
+
+            <section class="case-section">
+                <h2>Los hallazgos</h2>
+
+                <div class="stat-row">
+                    <div class="stat">
+                        <span class="num">0,81014</span>
+                        <span class="cap">Accuracy sobre el conjunto de test</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">1,72 → 0,69</span>
+                        <span class="cap">Reducción de la brecha entre validación y resultado real, en puntos</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">95% / 66%</span>
+                        <span class="cap">Fiabilidad en la mitad fácil del pasaje frente a la mitad difícil</span>
+                    </div>
+                </div>
+
+                <p>El problema tiene un <strong>techo de información bajo y perfectamente localizable</strong>. La mitad
+                    del pasaje se clasifica con una fiabilidad del 95%; la otra mitad, con un 66%. Y ese segundo grupo
+                    tiene rostro conocido: el pasaje terrícola de las cubiertas G y E, donde las reglas fuertes del
+                    conjunto dejan de operar y aparecen perfiles casi idénticos con destinos opuestos.</p>
+                <p>La aritmética de esas dos zonas sitúa el techo alcanzable en torno al <strong>81,5-82%</strong>, y el
+                    modelo final se instala justo en esa frontera.</p>
+
+                <div class="callout">
+                    <p>Nueve algoritmos distintos, y sus predicciones correlacionan por encima de 0,99. El conjunto no
+                        era tan diverso como su variedad de familias sugería: promediar opiniones casi idénticas no
+                        cancela ningún error.</p>
+                </div>
+
+                <p>Elegí el promedio en logits de los nueve modelos, que no ajusta ningún parámetro sobre los datos de
+                    validación y reparte el riesgo. Cuando dos procedimientos son estadísticamente indistinguibles, la
+                    decisión correcta no es quedarse con el número más alto sino con el que menos puede fallar.</p>
+
+                <h3>Cinco hipótesis que no sobrevivieron</h3>
+                <p>Sometí a prueba cinco hipótesis razonables y ninguna salió intacta. Tres quedaron refutadas, una no
+                    fue concluyente, y la quinta produjo el matiz más fino del trabajo: una variable de vecindad de
+                    camarote que el test de permutación demostró que <strong>contiene señal real y aun así no aporta
+                    nada al modelo</strong>, porque esa señal ya estaba capturada por otras vías.</p>
+                <p>Documentar los resultados negativos no es un ejercicio de modestia. Cada uno delimita el espacio de
+                    lo que no merece la pena volver a intentar.</p>
+            </section>
+
+            <section class="case-section">
+                <h2>Limitaciones y honestidad sobre el resultado</h2>
+                <p>La ganancia observada en la clasificación pública es superior a la que mi validación interna
+                    anticipaba. Con un error típico de 0,60 puntos sobre 4.277 casos, una parte de esa diferencia es
+                    sencillamente fortuna favorable, y sería incorrecto presentarla entera como mérito del modelo.</p>
+                <p>Sobre las puntuaciones de 0,84 y superiores que aparecen en la clasificación: el conjunto de test
+                    tiene 4.277 filas y la plataforma devuelve el accuracy con cinco decimales, así que cada envío
+                    filtra información sobre las etiquetas reales. Con dos envíos diarios permitidos desde 2022, el
+                    presupuesto acumulado por participante supera con creces lo necesario para reconstruir parte del
+                    test por fuerza bruta. El rango legítimo para un modelo construido sin mirar el test es 0,80-0,82.
+                </p>
+                <p>El siguiente margen de mejora está localizado: los no transportados de la zona difusa, el segmento
+                    con menor acierto de todo el sistema (63,7%). Con la expectativa calibrada, eso sí: hablamos de
+                    décimas, no de puntos.</p>
+            </section>
+
+            <div class="report-cta">
+                <h2>Informe técnico completo</h2>
+                <p>Documento con todo el análisis exploratorio, el código en R, las tablas de contrastes y los
+                    gráficos de diagnóstico.</p>
+                <a href="../Documento_spaceship_titanic_v2.html" class="cta-btn" target="_blank">
+                    Ver informe completo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+
+        <nav class="case-footer-nav">
+            <a href="temas-medium.html" class="prev">
+                <span class="dir">Proyecto anterior</span>
+                <span class="name">Análisis temático de Medium</span>
+            </a>
+            <a href="sentimiento-cripto.html" class="next">
+                <span class="dir">Proyecto siguiente</span>
+                <span class="name">Sentimiento en foros cripto</span>
+            </a>
+        </nav>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Carles Villar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
